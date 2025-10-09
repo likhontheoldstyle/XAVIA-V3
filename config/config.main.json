@@ -23,8 +23,8 @@
     "ABSOLUTES": [
         "61572915213085"
     ],
-    "NAME": "nix bot",
-    "PREFIX": "!",
+    "NAME": "LIKHON BOT",
+    "PREFIX": "/",
     "timezone": "Asia/Dhaka",
     "REFRESH": "43200000",
     "unsend": [
