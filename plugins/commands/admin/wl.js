@@ -11,7 +11,7 @@ const config = {
     description: "Manage whitelist mode and whitelist users",
     usage: "add <uid/@tag> | remove <uid/@tag> | list | on | off",
     category: "admin",
-    nixprefix: false
+    noprefix: false
 };
 
 const langData = {
