@@ -39,6 +39,11 @@ async function onCall({ message, args, getLang }) {
     const url = args[0];
     if (!url || !url.startsWith("http"))
         return reply(getLang("missingUrl"));
+    await downloadAndSend(message, url, getLang);
+}
+
+export async function downloadAndSend(message, url, getLang) {
+    const { reply } = message;
     try {
         const { data } = await axios.get(
             `https://nayan-video-downloader.vercel.app/alldown?url=${encodeURIComponent(url)}`
