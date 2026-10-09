@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const IMGBB_API = "https://imgbb-api.vercel.app/upload";
+const IMGBB_API = "https://rika-imgbb-api.vercel.app/upload";
 
 const config = {
   name: "imgbb",
