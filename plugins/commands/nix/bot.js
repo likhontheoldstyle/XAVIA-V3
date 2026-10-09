@@ -23,7 +23,7 @@ const config = {
     cooldown: 5,
     permissions: [0],
     credits: "Mohammad Nayan",
-    nixprefix: true,
+    rikaprefix: true,
 };
 
 const langData = {
