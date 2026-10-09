@@ -1,39 +1,44 @@
 import axios from "axios";
 
+const GEMINI_KEY = "AQ.Ab8RN6KVRSqDx1tqiUTCgBN4vPEpmFn3i2F6KSKAEBXMux4NIg";
+const API = "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent";
+
 const config = {
   name: "prompt",
   aliases: ["p"],
-  version: "0.0.1",
-  credits: "ArYAN",
+  version: "0.0.2",
+  credits: "Rika",
   permissions: [0],
-  description: "Image analysis with AI prompt",
+  description: "Image analysis with AI prompt (Gemini)",
   usage: "reply to an image with optional prompt",
   category: "ai"
 };
 
 async function onCall({ message, args }) {
-  const u = "http://65.109.80.126:20409/aryan/prompt";
-  const p = args.join(" ") || "Describe this image";
+  const prompt = args.join(" ") || "Describe this image";
 
   if (message.type === "message_reply" && message.messageReply?.attachments?.[0]?.type === "photo") {
     try {
-      const i = message.messageReply.attachments[0].url;
+      message.react("⏳");
+      const imageUrl = message.messageReply.attachments[0].url;
+      const img = await axios.get(imageUrl, { responseType: "arraybuffer" });
+      const mime = img.headers["content-type"]?.split(";")[0] || "image/jpeg";
+      const b64 = Buffer.from(img.data).toString("base64");
 
-      const r = await axios.get(u, {
-        params: { imageUrl: i, prompt: p }
-      });
+      const { data } = await axios.post(
+        `${API}?key=${GEMINI_KEY}`,
+        { contents: [{ parts: [{ text: prompt }, { inline_data: { mime_type: mime, data: b64 } }] }] },
+        { headers: { "Content-Type": "application/json" } }
+      );
 
-      const x = r.data.response || "No response";
+      const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (!reply) throw new Error("No response from Gemini API.");
 
-      if (r.data.status === false) {
-        return message.reply(`❌ API Error: ${r.data.message}`);
-      }
-
-      message.reply(x);
+      message.reply(reply);
       return message.react("✅");
     } catch (e) {
-      console.error("Local API call error:", e.message || e);
-      message.reply("❌ An error occurred with your local API. Make sure your server is running.");
+      console.error("Gemini vision error:", e.message || e);
+      message.reply("❌ An error occurred while analyzing the image.");
       return message.react("❌");
     }
   }
