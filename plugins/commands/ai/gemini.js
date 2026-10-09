@@ -1,19 +1,31 @@
 import axios from "axios";
 
-const u = "http://65.109.80.126:20409/aryan/gemini";
+const GEMINI_KEY = "AQ.Ab8RN6KVRSqDx1tqiUTCgBN4vPEpmFn3i2F6KSKAEBXMux4NIg";
+const API = "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent";
 
 const config = {
   name: "gemini",
   aliases: ["ai", "chat"],
-  version: "0.0.1",
-  credits: "ArYAN",
+  version: "0.0.2",
+  credits: "Rika",
   permissions: [0],
   cooldowns: 3,
-  description: "Ask Gemini AI - Talk with Gemini AI using Aryan's API",
+  description: "Ask Gemini AI",
   usage: "[your question]",
   category: "ai",
   rikaprefix: true
 };
+
+async function askGemini(prompt) {
+  const { data } = await axios.post(
+    `${API}?key=${GEMINI_KEY}`,
+    { contents: [{ parts: [{ text: prompt }] }] },
+    { headers: { "Content-Type": "application/json" } }
+  );
+  const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+  if (!reply) throw new Error("No response from Gemini API.");
+  return reply;
+}
 
 async function handleReply({ message }) {
   const p = message.body;
@@ -22,10 +34,7 @@ async function handleReply({ message }) {
   message.react("⏳");
 
   try {
-    const r = await axios.get(`${u}?prompt=${encodeURIComponent(p)}`);
-    const reply = r.data?.response;
-    if (!reply) throw new Error("No response from Gemini API.");
-
+    const reply = await askGemini(p);
     message.react("✅");
 
     message.reply(reply).then(d => {
@@ -47,10 +56,7 @@ async function onCall({ message, args }) {
   message.react("⏳");
 
   try {
-    const r = await axios.get(`${u}?prompt=${encodeURIComponent(p)}`);
-    const reply = r.data?.response;
-    if (!reply) throw new Error("No response from Gemini API.");
-
+    const reply = await askGemini(p);
     message.react("✅");
 
     message.reply(reply).then(d => {
