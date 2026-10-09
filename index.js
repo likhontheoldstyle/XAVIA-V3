@@ -89,7 +89,7 @@ let restartCount = 0;
 async function main() {
     await checkUpdate();
     await loadPlugins();
-    const child = spawn('node', ['--trace-warnings', '--experimental-import-meta-resolve', '--expose-gc', 'core/_build.js'], {
+    const child = spawn('node', ['--trace-warnings', '--experimental-import-meta-resolve', '--expose-gc', 'core/_run.js'], {
         cwd: process.cwd(),
         stdio: 'inherit',
         env: process.env
