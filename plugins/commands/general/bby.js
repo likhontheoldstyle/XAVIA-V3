@@ -15,7 +15,7 @@ const config = {
     description: "AI chat bot with learning",
     usage: "[msg] | teach [msg] - [reply] | remove [msg] | list",
     category: "chat",
-    nixprefix: true
+    rikaprefix: true
 };
 
 async function handleReply({ message }) {
