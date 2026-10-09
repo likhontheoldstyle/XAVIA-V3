@@ -6,6 +6,7 @@ import { resolve as resolvePath } from "path";
 import logger from "./var/modules/logger.js";
 import login from "aryan-nix-fca";
 import startServer from "./dashboard/server/app.js";
+import startKeepAlive from "./var/modules/keepalive.js";
 import handleListen from "./handlers/listen.js";
 import environments from "./var/modules/environments.get.js";
 import _init_var from "./var/_init.js";
@@ -53,6 +54,7 @@ async function boot() {
         global.controllers = { Threads: _Threads, Users: _Users };
         const adminPassword = getRandomPassword(8);
         startServer(adminPassword);
+        startKeepAlive();
         process.env.SERVER_ADMIN_PASSWORD = adminPassword;
         await startLogin(logger);
     } catch (e) {
