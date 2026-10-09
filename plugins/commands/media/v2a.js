@@ -1,8 +1,21 @@
 import axios from "axios";
 import { execFile } from "child_process";
-import { createWriteStream, unlink } from "fs";
+import { createWriteStream, existsSync, unlink } from "fs";
+import { createRequire } from "module";
 import { tmpdir } from "os";
 import { join } from "path";
+
+const require = createRequire(import.meta.url);
+
+export function resolveFfmpeg() {
+    try {
+        const p = require("ffmpeg-static");
+        if (typeof p === "string" && p.length > 0 && existsSync(p)) return p;
+    } catch {}
+    return "ffmpeg";
+}
+
+const FFMPEG_BIN = resolveFfmpeg();
 
 const config = {
     name: "v2a",
@@ -17,24 +30,18 @@ const langData = {
     en_US: {
         noVideo: "Please reply to a video message to convert it to audio.",
         notVideo: "The replied message is not a video.",
-        downloading: "⏳ Downloading video...",
-        converting: "⏳ Converting to audio...",
         done: "🎵 Here is your audio!",
         error: "An error occurred. Please try again later.",
     },
     vi_VN: {
         noVideo: "Vui lòng reply một tin nhắn video để chuyển thành audio.",
         notVideo: "Tin nhắn được reply không phải là video.",
-        downloading: "⏳ Đang tải video...",
-        converting: "⏳ Đang chuyển thành audio...",
         done: "🎵 Đây là audio của bạn!",
         error: "Đã có lỗi xảy ra. Vui lòng thử lại sau.",
     },
     ar_SY: {
         noVideo: "يرجى الرد على رسالة فيديو لتحويلها إلى صوت.",
         notVideo: "الرسالة المرد عليها ليست فيديو.",
-        downloading: "⏳ جارٍ تنزيل الفيديو...",
-        converting: "⏳ جارٍ التحويل إلى صوت...",
         done: "🎵 هذا هو الملف الصوتي!",
         error: "حدث خطأ. حاول لاحقًا.",
     },
@@ -61,7 +68,7 @@ function downloadFile(url, dest) {
 function convertToMp3(input, output) {
     return new Promise((resolve, reject) => {
         execFile(
-            "ffmpeg",
+            FFMPEG_BIN,
             ["-y", "-i", input, "-vn", "-c:a", "libmp3lame", "-b:a", "128k", output],
             (err) => (err ? reject(err) : resolve())
         );
@@ -69,7 +76,7 @@ function convertToMp3(input, output) {
 }
 
 async function onCall({ message, getLang }) {
-    const { reply, type, messageReply } = message;
+    const { reply, react, type, messageReply } = message;
     const att =
         type === "message_reply" ? messageReply?.attachments?.[0] : null;
     if (!att || !att.url) return reply(getLang("noVideo"));
@@ -80,14 +87,15 @@ async function onCall({ message, getLang }) {
     const outPath = base + ".mp3";
 
     try {
-        await reply(getLang("downloading"));
+        if (react) await react("⏳").catch(() => {});
         await downloadFile(att.url, inPath);
-        await reply(getLang("converting"));
         await convertToMp3(inPath, outPath);
         const stream = await getStream(outPath);
         await reply({ body: getLang("done"), attachment: stream });
+        if (react) await react("✅").catch(() => {});
     } catch (e) {
         console.error(e);
+        if (react) await react("❌").catch(() => {});
         reply(getLang("error"));
     } finally {
         unlink(inPath, () => {});
