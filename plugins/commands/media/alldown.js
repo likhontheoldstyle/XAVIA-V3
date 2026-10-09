@@ -53,7 +53,7 @@ export async function downloadAndSend(message, url, getLang) {
         if (react) await react("⏳").catch(() => {});
         const stream = await getStream(low);
         await reply({
-            body: `🎥 *Video Details* 🎥\n\n*Title:* ${title || "Video"}`,
+            body: `╭────────────❍\n╰➤『 🎬 𝐕𝐈𝐃𝐄𝐎 𝐃𝐄𝐓𝐀𝐈𝐋𝐒  』\n╰➤ 🎥 𝐓𝐈𝐓𝐋𝐄 : ${title || "Video"}\n╰─────────────────➤`,
             attachment: stream,
         });
         if (react) await react("✅").catch(() => {});
