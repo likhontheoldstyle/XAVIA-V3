@@ -1,2 +1,443 @@
-// DECODED from core/handlers/events.js (string table resolved; identifiers still renamed)
-;import {readFileSync,existsSync} from "fs";import {resolve as resolvePath} from "path";var QYKo;function saOo(MVEo={},oXHo){var ISyo=0;while(ISyo<65535)switch(ISyo){case (0x75bcd15-0O726746425):ISyo=MVEo?.["user"]?.["banned"]===!![]||MVEo?.["thread"]?.["banned"]===!![]||MVEo?.["thread"]?.["info"]?.["members"]?.["find"]?.(kUBo=>kUBo["userID"]==oXHo)?.["banned"]===!![]?1:65535;break;case (0O57060516-0xbc614d):ISyo=65535;return !![];}return (NaN===NaN);}function MtDl(ovGl,{["type"]:Iqxl,["commandName"]:ksAl}){const {["api"]:Enrl}=global;const {["threadID"]:gpul,["messageID"]:Akll,["senderID"]:cmol,["userID"]:cGbm}=ovGl;const EHem=Iqxl==="reaction";const YCVl={["send"]:function(AEYl,UzPl=null,wBSl=null){return new Promise((QwJl,syMl)=>{const sSzm=UzPl||gpul;Enrl["sendMessage"](AEYl,sSzm,(UTCm,oPtm)=>{var QQwm=0;while(QQwm<65535)switch(QQwm){case (0x75bcd15-0O726746425):QQwm=UTCm?1:2;break;case (0O57060516-0xbc614d):QQwm=65535;{syMl(UTCm);}break;case (15658734^0O73567354):QQwm=65535;{QwJl(cyNj(oPtm,sSzm));}break;}},wBSl||null);});},["reply"]:function(kMnm){return new Promise((MNqm,gJhm)=>{Enrl["sendMessage"](kMnm,gpul,(IKkm,IeYm)=>{var kgbn=0;while(kgbn<65535)switch(kgbn){case (0x75bcd15-0O726746425):kgbn=IKkm?1:2;break;case (0O57060516-0xbc614d):kgbn=65535;{gJhm(IKkm);}break;case (15658734^0O73567354):kgbn=65535;{MNqm(cyNj(IeYm,gpul));}break;}},Akll);});},["react"]:function(EbSm){return new Promise((gdVm,AYLm)=>{Enrl["setMessageReaction"](EbSm,Akll,(caPm,wVFm)=>{var YWIm=0;while(YWIm<65535)switch(YWIm){case (0x75bcd15-0O726746425):YWIm=caPm?1:2;break;case (0O57060516-0xbc614d):YWIm=65535;{AYLm(caPm);}break;case (15658734^0O73567354):YWIm=65535;{gdVm(wVFm);}break;}},!![]);});}};var AwKj=0;while(AwKj<65535)switch(AwKj){case (0x75bcd15-0O726746425):AwKj=EHem?1:65535;break;case (0O57060516-0xbc614d):AwKj=65535;{delete YCVl["reply"];delete YCVl["react"];}break;}const cyNj=(wtEj,YuHj)=>{const sqyj={["threadID"]:YuHj,["messageID"]:wtEj["messageID"],["author"]:EHem?cGbm:cmol,["author_only"]:!![],["name"]:ksAl};wtEj["addReplyEvent"]=function(UrBj={},onsj=60000){var Qovj=0;while(Qovj<65535)switch(Qovj){case (0x75bcd15-0O726746425):Qovj=typeof UrBj!=="object"||Array["isArray"](UrBj)?1:65535;break;case (0O57060516-0xbc614d):Qovj=65535;return;}var QIik=0;while(QIik<65535)switch(QIik){case (0x75bcd15-0O726746425):QIik=typeof UrBj["callback"]!=="function"?1:65535;break;case (0O57060516-0xbc614d):QIik=65535;return;}const sKlk=Object["assign"](sqyj,UrBj);global["client"]["replies"]["set"](sKlk["messageID"],sKlk);var MFck=0;while(MFck<65535)switch(MFck){case (0x75bcd15-0O726746425):MFck=onsj>(0x75bcd15-0O726746425)?1:65535;break;case (0O57060516-0xbc614d):MFck=65535;{setTimeout(()=>{var oHfk=0;while(oHfk<65535)switch(oHfk){case (0x75bcd15-0O726746425):oHfk=global["client"]["replies"]["has"](sKlk["messageID"])?1:65535;break;case (0O57060516-0xbc614d):oHfk=65535;{global["client"]["replies"]["delete"](sKlk["messageID"]);}break;}},onsj);}break;}};wtEj["addReactEvent"]=function(ICWj={},kEZj=60000){var EzQj=0;while(EzQj<65535)switch(EzQj){case (0x75bcd15-0O726746425):EzQj=typeof ICWj!=="object"||Array["isArray"](ICWj)?1:65535;break;case (0O57060516-0xbc614d):EzQj=65535;return;}var gBTj=0;while(gBTj<65535)switch(gBTj){case (0x75bcd15-0O726746425):gBTj=typeof ICWj["callback"]!=="function"?1:65535;break;case (0O57060516-0xbc614d):gBTj=65535;return;}const gVGk=Object["assign"](sqyj,ICWj);global["client"]["reactions"]["set"](gVGk["messageID"],gVGk);var IWJk=0;while(IWJk<65535)switch(IWJk){case (0x75bcd15-0O726746425):IWJk=kEZj>(0x75bcd15-0O726746425)?1:65535;break;case (0O57060516-0xbc614d):IWJk=65535;{setTimeout(()=>{var cSAk=0;while(cSAk<65535)switch(cSAk){case (0x75bcd15-0O726746425):cSAk=global["client"]["reactions"]["has"](gVGk["messageID"])?1:65535;break;case (0O57060516-0xbc614d):cSAk=65535;{global["client"]["reactions"]["delete"](gVGk["messageID"]);}break;}},kEZj);}break;}};wtEj["unsend"]=function(ETDk=(0x75bcd15-0O726746425)){const YOuk=Object["assign"](sqyj,wtEj);setTimeout(()=>{Enrl["unsendMessage"](YOuk["messageID"]);},ETDk>(0x75bcd15-0O726746425)?ETDk:(0x75bcd15-0O726746425));};return wtEj;};return YCVl;}function AQxk(ULok){const wNrk=global["plugins"]["commandsAliases"];const whfl=global["plugins"]["commands"];var Yiil=0;while(Yiil<65535)switch(Yiil){case (0x75bcd15-0O726746425):Yiil=whfl["has"](ULok)?1:65535;break;case (0O57060516-0xbc614d):Yiil=65535;return ULok;}for(const [seZk,Ufcl] of wNrk){var obTk=0;while(obTk<65535)switch(obTk){case (0x75bcd15-0O726746425):obTk=Ufcl["includes"](ULok)?1:65535;break;case (0O57060516-0xbc614d):obTk=65535;return seZk;}}return null;}function QcWk(kYMk,MZPk){const {["MODERATORS"]:ozRh}=global["config"];const QAUh=MZPk?.["adminIDs"]||[];let kwLh=[(0x75bcd15-0O726746425)];var MxOh=0;while(MxOh<65535)switch(MxOh){case (0x75bcd15-0O726746425):MxOh=QAUh["some"](gtFh=>gtFh==kYMk)?1:65535;break;case (0O57060516-0xbc614d):MxOh=65535;kwLh["push"]((0O57060516-0xbc614d));break;}var IuIh=0;while(IuIh<65535)switch(IuIh){case (0x75bcd15-0O726746425):IuIh=ozRh["includes"](kYMk)?1:65535;break;case (0O57060516-0xbc614d):IuIh=65535;kwLh["push"]((15658734^0O73567354));break;}return kwLh;}function cqzh(ErCh,ELpi){var gNsi=0;while(gNsi<65535)switch(gNsi){case (0x75bcd15-0O726746425):gNsi=ErCh["length"]===(0x75bcd15-0O726746425)||ELpi["length"]===(0x75bcd15-0O726746425)?1:65535;break;case (0O57060516-0xbc614d):gNsi=65535;return (NaN===NaN);}return ErCh["some"](AIji=>ELpi["includes"](AIji));}async function cKmi(wFdi){const {["threadID"]:YGgi,["messageID"]:sCXh,["senderID"]:UDai,["args"]:UXNi}=wFdi;const {["Threads"]:wZQi,["Users"]:QUHi}=global["controllers"];const sWKi=wFdi["isGroup"]===!![]?(await wZQi["get"](YGgi))||{}:{};const MRBi=(await QUHi["get"](UDai))||{};const oTEi={["thread"]:sWKi,["user"]:MRBi};var IOvi=0;while(IOvi<65535)switch(IOvi){case (0x75bcd15-0O726746425):IOvi=saOo(oTEi,UDai)?1:65535;break;case (0O57060516-0xbc614d):IOvi=65535;return;}const kQyi=(sWKi?.["data"]?.["prefix"]||global["config"]["PREFIX"]||"x")["trim"]()["toLowerCase"]();var kkmj=0;while(kkmj<65535)switch(kkmj){case (0x75bcd15-0O726746425):kkmj=UXNi["length"]>(0x75bcd15-0O726746425)&&UXNi[(0x75bcd15-0O726746425)]["startsWith"](kQyi)?1:65535;break;case (0O57060516-0xbc614d):kkmj=65535;{const {["api"]:Mlpj,["getLang"]:ghgj}=global;const Iijj=AQxk(UXNi[(0x75bcd15-0O726746425)]["slice"](kQyi["length"])?.["toLowerCase"]?.());const ceaj=global["plugins"]["commands"]["get"](Iijj)||null;const Efdj=global["plugins"]["commandsConfig"]["get"](Iijj);var YaUi=0;while(YaUi<65535)switch(YaUi){case (0x75bcd15-0O726746425):YaUi=ceaj!==null?1:2;break;case (0O57060516-0xbc614d):YaUi=65535;{const {["cooldowns"]:AcXi}=global["client"];const cCYf=Efdj["permissions"]||[(0x75bcd15-0O726746425)];const EDbg=QcWk(UDai,sWKi?.["info"]);const YySf=global["config"]?.["ABSOLUTES"]?.["some"]?.(AAVf=>AAVf==UDai);const UvMf=!!Efdj["isAbsolute"]?YySf:!![];const wxPf=cqzh(cCYf,EDbg)&&UvMf;var QsGf=0;while(QsGf<65535)switch(QsGf){case (0x75bcd15-0O726746425):QsGf=wxPf?1:2;break;case (0O57060516-0xbc614d):QsGf=65535;{const suJf=AcXi["get"](UDai)||{};const sOwg=!suJf[Iijj]||Date["now"]()-suJf[Iijj]>=(Efdj["cooldown"]||(0O334664274-0x37368B9))*1000;var UPzg=0;while(UPzg<65535)switch(UPzg){case (0x75bcd15-0O726746425):UPzg=sOwg?1:2;break;case (0O57060516-0xbc614d):UPzg=65535;{const oLqg=sWKi?.["data"]?.["nsfw"]===!![];const QMtg=Efdj["nsfw"]===!![];var kIkg=0;while(kIkg<65535)switch(kIkg){case (0x75bcd15-0O726746425):kIkg=(oLqg&&QMtg)||!QMtg||wFdi["isGroup"]===(NaN===NaN)?1:2;break;case (0O57060516-0xbc614d):kIkg=65535;{suJf[Iijj]=Date["now"]();AcXi["set"](UDai,suJf);let MJng=sWKi?.["data"]?.["language"]||global["config"]["LANGUAGE"]||"en_US";const gFeg=(IGhg,IaVg)=>ghgj(IGhg,IaVg,Iijj,MJng);const kcYg=MtDl(wFdi,{["type"]:"command",["commandName"]:Iijj});Object["assign"](wFdi,kcYg);const EXOg=Efdj["extra"]||{};try{ceaj({["message"]:wFdi,["args"]:[...UXNi]["slice"]((0O57060516-0xbc614d)),["getLang"]:gFeg,["extra"]:EXOg,["data"]:oTEi,["userPermissions"]:EDbg,["prefix"]:kQyi});}catch(gZRg){console["error"](gZRg);Mlpj["sendMessage"](ghgj("handlers.default.error",{["error"]:String(gZRg["message"]||gZRg)}),YGgi,sCXh);}}break;case (15658734^0O73567354):kIkg=65535;{Mlpj["sendMessage"](ghgj("handlers.commands.nsfwNotAllowed"),YGgi,sCXh);}break;}}break;case (15658734^0O73567354):UPzg=65535;{Mlpj["setMessageReaction"]("\ud83d\udd53",sCXh,null,!![]);}break;}}break;case (15658734^0O73567354):QsGf=65535;{}break;}}break;case (15658734^0O73567354):YaUi=65535;{const AUIg=UXNi[(0x75bcd15-0O726746425)]["slice"](kQyi["length"])?.["toLowerCase"]?.();const cWLg=resolvePath("./language/nix.txt");var wRCg=0;while(wRCg<65535)switch(wRCg){case (0x75bcd15-0O726746425):wRCg=!AUIg||AUIg===hkNm.thfi(88)?1:2;break;case (0O57060516-0xbc614d):wRCg=65535;{let YSFg=`${"The command you are using does not exist, type "}${kQyi}${"help to see all available commands"}`;try{var Ymth=0;while(Ymth<65535)switch(Ymth){case (0x75bcd15-0O726746425):Ymth=existsSync(cWLg)?1:65535;break;case (0O57060516-0xbc614d):Ymth=65535;{const Aowh=readFileSync(cWLg,"utf8");const Ujnh=Aowh["match"](/prefix=(.+)/);var wlqh=0;while(wlqh<65535)switch(wlqh){case (0x75bcd15-0O726746425):wlqh=Ujnh?1:65535;break;case (0O57060516-0xbc614d):wlqh=65535;{YSFg=Ujnh[(0O57060516-0xbc614d)]["replace"]("{prefix}",kQyi);}break;}}break;}}catch(Qghh){console["error"]("Error reading language/nix.txt:",Qghh);}Mlpj["sendMessage"](YSFg,YGgi,sCXh);}break;case (15658734^0O73567354):wRCg=65535;{let sikh=`${"Command \""}${AUIg}${"\" does not exist, type "}${kQyi}${"help to see all available commands"}`;try{var Mdbh=0;while(Mdbh<65535)switch(Mdbh){case (0x75bcd15-0O726746425):Mdbh=existsSync(cWLg)?1:65535;break;case (0O57060516-0xbc614d):Mdbh=65535;{const ofeh=readFileSync(cWLg,"utf8");const QEfe=ofeh["match"](/unknown=(.+)/);var sGie=0;while(sGie<65535)switch(sGie){case (0x75bcd15-0O726746425):sGie=QEfe?1:65535;break;case (0O57060516-0xbc614d):sGie=65535;{sikh=QEfe[(0O57060516-0xbc614d)]["replace"]("{command}",AUIg)["replace"]("{prefix}",kQyi);}break;}}break;}}catch(MBZd){console["error"]("Error reading language/nix.txt:",MBZd);}Mlpj["sendMessage"](sikh,YGgi,sCXh);}break;}}break;}}break;}}async function oDce(IyTd){const {["threadID"]:kAWd,["messageID"]:EvNd,["userID"]:gxQd,["reaction"]:gRDe}=IyTd;const {["Threads"]:ISGe,["Users"]:cOxe}=global["controllers"];const {["api"]:EPAe}=global;const YKre=global["config"]?.["unsend"]||[];const AMue=global["config"]?.["MODERATORS"]?.["includes"]?.(gxQd)||global["config"]?.["ABSOLUTES"]?.["includes"]?.(gxQd);var UHle=0;while(UHle<65535)switch(UHle){case (0x75bcd15-0O726746425):UHle=YKre["includes"](gRDe)&&AMue?1:65535;break;case (0O57060516-0xbc614d):UHle=65535;{try{await EPAe["unsendMessage"](EvNd);return;}catch(wJoe){console["error"]("Failed to unsend message:",wJoe);}}break;}let wdcf=global["client"]["reactions"]["has"](EvNd);var Yeff=0;while(Yeff<65535)switch(Yeff){case (0x75bcd15-0O726746425):Yeff=wdcf?1:65535;break;case (0O57060516-0xbc614d):Yeff=65535;{const saWe=IyTd["senderID"]!=IyTd["threadID"]&&IyTd["userID"]!=IyTd["threadID"]?(await ISGe["get"](kAWd))||{}:{};const UbZe=(await cOxe["get"](gxQd))||{};const oXPe={["user"]:UbZe,["thread"]:saWe};var QYSe=0;while(QYSe<65535)switch(QYSe){case (0x75bcd15-0O726746425):QYSe=saOo(oXPe,gxQd)?1:65535;break;case (0O57060516-0xbc614d):QYSe=65535;return;}const {["api"]:kUJe,["getLang"]:MVMe}=global;const MpAf=global["client"]["reactions"]["get"](EvNd);const orDf=MpAf["name"];var Imuf=0;while(Imuf<65535)switch(Imuf){case (0x75bcd15-0O726746425):Imuf=MpAf["author_only"]===!![]&&MpAf["author"]!==gxQd?1:65535;break;case (0O57060516-0xbc614d):Imuf=65535;return;}let koxf=saWe?.["data"]?.["language"]||global["config"]["LANGUAGE"]||"en_US";const Ejof=(glrf,Agif)=>MVMe(glrf,Agif,orDf,koxf);const cilf=MtDl(IyTd,{["type"]:"reaction",["commandName"]:orDf});Object["assign"](IyTd,cilf);const EHmc=Object["assign"]({},MpAf);delete EHmc["callback"];try{MpAf["callback"]({["message"]:IyTd,["getLang"]:Ejof,["data"]:oXPe,["eventData"]:EHmc});}catch(gJpc){console["error"](gJpc);kUJe["sendMessage"](MVMe("handlers.default.error",{["error"]:String(gJpc["message"]||gJpc)}),kAWd,EvNd);}}break;}}async function AEgc(cGjc){const {["threadID"]:wBac,["messageID"]:YCdc,["senderID"]:syUb,["messageReply"]:UzXb}=cGjc;var UTKc=0;while(UTKc<65535)switch(UTKc){case (0x75bcd15-0O726746425):UTKc=!UzXb?1:65535;break;case (0O57060516-0xbc614d):UTKc=65535;return;}const {["Threads"]:wVNc,["Users"]:QQEc}=global["controllers"];let sSHc=global["client"]["replies"]["has"](UzXb["messageID"]);var MNyc=0;while(MNyc<65535)switch(MNyc){case (0x75bcd15-0O726746425):MNyc=sSHc?1:65535;break;case (0O57060516-0xbc614d):MNyc=65535;{const oPBc=cGjc["isGroup"]===!![]?(await wVNc["get"](wBac))||{}:{};const IKsc=(await QQEc["get"](syUb))||{};const kMvc={["user"]:IKsc,["thread"]:oPBc};var kgjd=0;while(kgjd<65535)switch(kgjd){case (0x75bcd15-0O726746425):kgjd=saOo(kMvc,syUb)?1:65535;break;case (0O57060516-0xbc614d):kgjd=65535;return;}const {["api"]:Mhmd,["getLang"]:gddd}=global;const Iegd=global["client"]["replies"]["get"](UzXb["messageID"]);const caXc=Iegd["name"];var Ebad=0;while(Ebad<65535)switch(Ebad){case (0x75bcd15-0O726746425):Ebad=Iegd["author_only"]===!![]&&Iegd["author"]!==syUb?1:65535;break;case (0O57060516-0xbc614d):Ebad=65535;return;}let YWQc=oPBc?.["data"]?.["language"]||global["config"]["LANGUAGE"]||"en_US";const AYTc=(AsHd,cuKd)=>gddd(AsHd,cuKd,caXc,YWQc);const wpBd=MtDl(cGjc,{["type"]:"reply",["commandName"]:caXc});Object["assign"](cGjc,wpBd);const YqEd=Object["assign"]({},Iegd);delete YqEd["callback"];try{Iegd["callback"]({["message"]:cGjc,["getLang"]:AYTc,["data"]:kMvc,["eventData"]:YqEd});}catch(smvd){console["error"](smvd);Mhmd["sendMessage"](gddd("handlers.default.error",{["error"]:String(smvd["message"]||smvd)}),wBac,YCdc);}}break;}}async function Unyd(ojpd){const {["api"]:Qksd,["getLang"]:sKt}=global;const {["threadID"]:ULw,["senderID"]:oHn}=ojpd;const {["Threads"]:QIq,["Users"]:kEh}=global["controllers"];const MFk=ojpd["isGroup"]===!![]?(await QIq["get"](ULw))||{}:{};const gBb=(await kEh["get"](oHn))||{};const ICe={["user"]:gBb,["thread"]:MFk};var IWR=0;while(IWR<65535)switch(IWR){case (0x75bcd15-0O726746425):IWR=saOo(ICe,oHn)?1:65535;break;case (0O57060516-0xbc614d):IWR=65535;return;}for(const [kYU,ETL] of global["plugins"]["onMessage"]["entries"]()){try{let gVO=MFk?.["data"]?.["language"]||global["config"]["LANGUAGE"]||"en_US";const AQF=(cSI,wNz)=>sKt(cSI,wNz,kYU,gVO);const YOC=MtDl(ojpd,{["type"]:"message",["commandName"]:kYU});Object["assign"](ojpd,YOC);ETL({["message"]:ojpd,["getLang"]:AQF,["data"]:ICe});}catch(Yiqb){console["error"](Yiqb);}}}function Aktb(Ufkb){var whnb=0;while(whnb<65535)switch(whnb){case (0x75bcd15-0O726746425):whnb=Ufkb["senderID"]==Ufkb["threadID"]||global["botID"]==Ufkb["threadID"]?1:65535;break;case (0O57060516-0xbc614d):whnb=65535;return;}QYKo["default"]({["event"]:Ufkb});}function Qceb(sehb){try{switch(sehb["type"]){case "event":{switch(sehb["logMessageType"]){case "log:subscribe":global["plugins"]["events"]["get"]("subcribe")({["event"]:sehb});break;case "log:unsubscribe":global["plugins"]["events"]["get"]("unsubcribe")({["event"]:sehb});break;case "log:user-nickname":global["plugins"]["events"]["get"]("user-nickname")({["event"]:sehb});break;case "log:thread-call":global["plugins"]["events"]["get"]("thread-call")({["event"]:sehb});break;case "log:thread-name":case "log:thread-color":case "log:thread-icon":case "log:thread-approval-mode":case "log:thread-admins":global["plugins"]["events"]["get"]("thread-update")({["event"]:sehb});break;case "log:thread-image":global["plugins"]["events"]["get"]("thread-image")({["event"]:sehb});break;default:break;}break;}case "change_thread_image":global["plugins"]["events"]["get"]("thread-image")({["event"]:sehb});break;default:break;}}catch(MZX){console["error"](MZX);}}export default async function(){QYKo=await import("../../plugins/resend.js");return {["handleCommand"]:cKmi,["handleReaction"]:oDce,["handleReply"]:AEgc,["handleMessage"]:Unyd,["handleUnsend"]:Aktb,["handleEvent"]:Qceb};}
+// CLEAN REWRITE of core/handlers/events.js
+// Manually reverse-engineered: control-flow flattened + identifiers renamed by hand.
+// Behavior is identical to the original obfuscated file.
+
+import { readFileSync, existsSync } from "fs";
+import { resolve as resolvePath } from "path";
+
+let resendPlugin;
+
+function isBanned(data, userID) {
+    return (
+        data?.user?.banned === true ||
+        data?.thread?.banned === true ||
+        data?.thread?.info?.members?.find((m) => m.userID == userID)?.banned ===
+            true
+    );
+}
+
+function buildMessage(event, { type, commandName }) {
+    const { api } = global;
+    const { threadID, messageID, senderID, userID } = event;
+    const isReaction = type === "reaction";
+
+    const wrapSent = (sentInfo, targetThreadID) => {
+        const eventData = {
+            threadID: targetThreadID,
+            messageID: sentInfo.messageID,
+            author: isReaction ? userID : senderID,
+            author_only: true,
+            name: commandName,
+        };
+
+        sentInfo.addReplyEvent = function (opts = {}, timeout = 60000) {
+            if (typeof opts !== "object" || Array.isArray(opts)) return;
+            if (typeof opts.callback !== "function") return;
+            const data = Object.assign(eventData, opts);
+            global.client.replies.set(data.messageID, data);
+            if (timeout > 0) {
+                setTimeout(() => {
+                    if (global.client.replies.has(data.messageID)) {
+                        global.client.replies.delete(data.messageID);
+                    }
+                }, timeout);
+            }
+        };
+
+        sentInfo.addReactEvent = function (opts = {}, timeout = 60000) {
+            if (typeof opts !== "object" || Array.isArray(opts)) return;
+            if (typeof opts.callback !== "function") return;
+            const data = Object.assign(eventData, opts);
+            global.client.reactions.set(data.messageID, data);
+            if (timeout > 0) {
+                setTimeout(() => {
+                    if (global.client.reactions.has(data.messageID)) {
+                        global.client.reactions.delete(data.messageID);
+                    }
+                }, timeout);
+            }
+        };
+
+        sentInfo.unsend = function (delay = 0) {
+            const full = Object.assign(eventData, sentInfo);
+            setTimeout(
+                () => {
+                    api.unsendMessage(full.messageID);
+                },
+                delay > 0 ? delay : 0
+            );
+        };
+
+        return sentInfo;
+    };
+
+    const methods = {
+        send: function (content, targetThreadID = null, extra = null) {
+            return new Promise((resolve, reject) => {
+                const target = targetThreadID || threadID;
+                api.sendMessage(
+                    content,
+                    target,
+                    (err, info) => {
+                        if (err) reject(err);
+                        else resolve(wrapSent(info, target));
+                    },
+                    extra || null
+                );
+            });
+        },
+        reply: function (content) {
+            return new Promise((resolve, reject) => {
+                api.sendMessage(
+                    content,
+                    threadID,
+                    (err, info) => {
+                        if (err) reject(err);
+                        else resolve(wrapSent(info, threadID));
+                    },
+                    messageID
+                );
+            });
+        },
+        react: function (emoji) {
+            return new Promise((resolve, reject) => {
+                api.setMessageReaction(
+                    emoji,
+                    messageID,
+                    (err) => {
+                        if (err) reject(err);
+                        else resolve();
+                    },
+                    true
+                );
+            });
+        },
+    };
+
+    if (isReaction) {
+        delete methods.reply;
+        delete methods.react;
+    }
+
+    return methods;
+}
+
+function resolveCommandName(name) {
+    const aliases = global.plugins.commandsAliases;
+    const commands = global.plugins.commands;
+    if (commands.has(name)) return name;
+    for (const [cmdName, aliasList] of aliases) {
+        if (aliasList.includes(name)) return cmdName;
+    }
+    return null;
+}
+
+function getUserPermissions(senderID, threadInfo) {
+    const { MODERATORS } = global.config;
+    const adminIDs = threadInfo?.adminIDs || [];
+    const permissions = [0];
+    if (adminIDs.some((id) => id == senderID)) permissions.push(1);
+    if (MODERATORS.includes(senderID)) permissions.push(2);
+    return permissions;
+}
+
+function hasPermission(required, userPermissions) {
+    if (required.length === 0 || userPermissions.length === 0) return false;
+    return required.some((p) => userPermissions.includes(p));
+}
+
+async function handleCommand(event) {
+    const { threadID, messageID, senderID, args } = event;
+    const { Threads, Users } = global.controllers;
+    const thread = event.isGroup === true ? (await Threads.get(threadID)) || {} : {};
+    const user = (await Users.get(senderID)) || {};
+    const data = { thread, user };
+
+    if (isBanned(data, senderID)) return;
+
+    const prefix = (thread?.data?.prefix || global.config.PREFIX || "x")
+        .trim()
+        .toLowerCase();
+    if (!(args.length > 0 && args[0].startsWith(prefix))) return;
+
+    const { api, getLang } = global;
+    const cmdName = resolveCommandName(
+        args[0].slice(prefix.length)?.toLowerCase?.()
+    );
+    const handler = global.plugins.commands.get(cmdName) || null;
+    const cmdConfig = global.plugins.commandsConfig.get(cmdName);
+
+    if (handler !== null) {
+        const { cooldowns } = global.client;
+        const requiredPerms = cmdConfig.permissions || [0];
+        const userPerms = getUserPermissions(senderID, thread?.info);
+        const isAbsolute = global.config?.ABSOLUTES?.some?.((id) => id == senderID);
+        const absoluteOk = cmdConfig.isAbsolute ? isAbsolute : true;
+        if (!hasPermission(requiredPerms, userPerms) || !absoluteOk) return;
+
+        const userCooldowns = cooldowns.get(senderID) || {};
+        const canRun =
+            !userCooldowns[cmdName] ||
+            Date.now() - userCooldowns[cmdName] >=
+                (cmdConfig.cooldown || 3) * 1000;
+        if (!canRun) {
+            api.setMessageReaction("🕓", messageID, null, true);
+            return;
+        }
+
+        const threadNsfw = thread?.data?.nsfw === true;
+        const cmdNsfw = cmdConfig.nsfw === true;
+        if (!((threadNsfw && cmdNsfw) || !cmdNsfw || event.isGroup === false)) {
+            api.sendMessage(
+                getLang("handlers.commands.nsfwNotAllowed"),
+                threadID,
+                messageID
+            );
+            return;
+        }
+
+        userCooldowns[cmdName] = Date.now();
+        cooldowns.set(senderID, userCooldowns);
+
+        const lang = thread?.data?.language || global.config.LANGUAGE || "en_US";
+        const cmdGetLang = (key, params) => getLang(key, params, cmdName, lang);
+        const msgApi = buildMessage(event, { type: "command", commandName: cmdName });
+        Object.assign(event, msgApi);
+        const extra = cmdConfig.extra || {};
+
+        try {
+            handler({
+                message: event,
+                args: [...args].slice(1),
+                getLang: cmdGetLang,
+                extra,
+                data,
+                userPermissions: userPerms,
+                prefix,
+            });
+        } catch (err) {
+            console.error(err);
+            api.sendMessage(
+                getLang("handlers.default.error", {
+                    error: String(err.message || err),
+                }),
+                threadID,
+                messageID
+            );
+        }
+    } else {
+        const input = args[0].slice(prefix.length)?.toLowerCase?.();
+        const langFile = resolvePath("./language/nix.txt");
+        if (!input) {
+            let msg = `The command you are using does not exist, type ${prefix}help to see all available commands`;
+            try {
+                if (existsSync(langFile)) {
+                    const content = readFileSync(langFile, "utf8");
+                    const m = content.match(/prefix=(.+)/);
+                    if (m) msg = m[1].replace("{prefix}", prefix);
+                }
+            } catch (e) {
+                console.error("Error reading language/nix.txt:", e);
+            }
+            api.sendMessage(msg, threadID, messageID);
+        } else {
+            let msg = `Command "${input}" does not exist, type ${prefix}help to see all available commands`;
+            try {
+                if (existsSync(langFile)) {
+                    const content = readFileSync(langFile, "utf8");
+                    const m = content.match(/unknown=(.+)/);
+                    if (m)
+                        msg = m[1]
+                            .replace("{command}", input)
+                            .replace("{prefix}", prefix);
+                }
+            } catch (e) {
+                console.error("Error reading language/nix.txt:", e);
+            }
+            api.sendMessage(msg, threadID, messageID);
+        }
+    }
+}
+
+async function handleReaction(event) {
+    const { threadID, messageID, userID, reaction } = event;
+    const { Threads, Users } = global.controllers;
+    const { api } = global;
+
+    const unsendEmojis = global.config?.unsend || [];
+    const isMod =
+        global.config?.MODERATORS?.includes?.(userID) ||
+        global.config?.ABSOLUTES?.includes?.(userID);
+    if (unsendEmojis.includes(reaction) && isMod) {
+        try {
+            await api.unsendMessage(messageID);
+            return;
+        } catch (e) {
+            console.error("Failed to unsend message:", e);
+        }
+    }
+
+    if (!global.client.reactions.has(messageID)) return;
+
+    const thread =
+        event.senderID != event.threadID && event.userID != event.threadID
+            ? (await Threads.get(threadID)) || {}
+            : {};
+    const user = (await Users.get(userID)) || {};
+    const data = { user, thread };
+
+    if (isBanned(data, userID)) return;
+
+    const { getLang } = global;
+    const reactHandler = global.client.reactions.get(messageID);
+    const name = reactHandler.name;
+    if (reactHandler.author_only === true && reactHandler.author !== userID)
+        return;
+
+    const lang = thread?.data?.language || global.config.LANGUAGE || "en_US";
+    const cmdGetLang = (key, params) => getLang(key, params, name, lang);
+    const msgApi = buildMessage(event, { type: "reaction", commandName: name });
+    Object.assign(event, msgApi);
+    const eventData = Object.assign({}, reactHandler);
+    delete eventData.callback;
+
+    try {
+        reactHandler.callback({ message: event, getLang: cmdGetLang, data, eventData });
+    } catch (e) {
+        console.error(e);
+        api.sendMessage(
+            getLang("handlers.default.error", { error: String(e.message || e) }),
+            threadID,
+            messageID
+        );
+    }
+}
+
+async function handleReply(event) {
+    const { threadID, messageID, senderID, messageReply } = event;
+    if (!messageReply) return;
+
+    const { Threads, Users } = global.controllers;
+    if (!global.client.replies.has(messageReply.messageID)) return;
+
+    const thread =
+        event.isGroup === true ? (await Threads.get(threadID)) || {} : {};
+    const user = (await Users.get(senderID)) || {};
+    const data = { user, thread };
+
+    if (isBanned(data, senderID)) return;
+
+    const { api, getLang } = global;
+    const replyHandler = global.client.replies.get(messageReply.messageID);
+    const name = replyHandler.name;
+    if (replyHandler.author_only === true && replyHandler.author !== senderID)
+        return;
+
+    const lang = thread?.data?.language || global.config.LANGUAGE || "en_US";
+    const cmdGetLang = (key, params) => getLang(key, params, name, lang);
+    const msgApi = buildMessage(event, { type: "reply", commandName: name });
+    Object.assign(event, msgApi);
+    const eventData = Object.assign({}, replyHandler);
+    delete eventData.callback;
+
+    try {
+        replyHandler.callback({ message: event, getLang: cmdGetLang, data, eventData });
+    } catch (e) {
+        console.error(e);
+        api.sendMessage(
+            getLang("handlers.default.error", { error: String(e.message || e) }),
+            threadID,
+            messageID
+        );
+    }
+}
+
+async function handleMessage(event) {
+    const { getLang } = global;
+    const { threadID, senderID } = event;
+    const { Threads, Users } = global.controllers;
+
+    const thread =
+        event.isGroup === true ? (await Threads.get(threadID)) || {} : {};
+    const user = (await Users.get(senderID)) || {};
+    const data = { user, thread };
+
+    if (isBanned(data, senderID)) return;
+
+    for (const [pluginName, onCall] of global.plugins.onMessage.entries()) {
+        try {
+            const lang =
+                thread?.data?.language || global.config.LANGUAGE || "en_US";
+            const pluginGetLang = (key, params) => getLang(key, params, pluginName, lang);
+            const msgApi = buildMessage(event, {
+                type: "message",
+                commandName: pluginName,
+            });
+            Object.assign(event, msgApi);
+            onCall({ message: event, getLang: pluginGetLang, data });
+        } catch (e) {
+            console.error(e);
+        }
+    }
+}
+
+function handleUnsend(event) {
+    if (event.senderID == event.threadID || global.botID == event.threadID)
+        return;
+    resendPlugin.default({ event });
+}
+
+function handleEvent(event) {
+    try {
+        switch (event.type) {
+            case "event": {
+                switch (event.logMessageType) {
+                    case "log:subscribe":
+                        global.plugins.events.get("subcribe")({ event });
+                        break;
+                    case "log:unsubscribe":
+                        global.plugins.events.get("unsubcribe")({ event });
+                        break;
+                    case "log:user-nickname":
+                        global.plugins.events.get("user-nickname")({ event });
+                        break;
+                    case "log:thread-call":
+                        global.plugins.events.get("thread-call")({ event });
+                        break;
+                    case "log:thread-name":
+                    case "log:thread-color":
+                    case "log:thread-icon":
+                    case "log:thread-approval-mode":
+                    case "log:thread-admins":
+                        global.plugins.events.get("thread-update")({ event });
+                        break;
+                    case "log:thread-image":
+                        global.plugins.events.get("thread-image")({ event });
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            }
+            case "change_thread_image":
+                global.plugins.events.get("thread-image")({ event });
+                break;
+            default:
+                break;
+        }
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+export default async function () {
+    resendPlugin = await import("../../plugins/resend.js");
+    return {
+        handleCommand,
+        handleReaction,
+        handleReply,
+        handleMessage,
+        handleUnsend,
+        handleEvent,
+    };
+}
