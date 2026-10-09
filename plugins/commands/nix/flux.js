@@ -3,11 +3,11 @@ import axios from "axios";
 const config = {
   name: "flux",
   aliases: [],
-  version: "0.0.1",
-  credits: "ArYAN",
+  version: "0.0.2",
+  credits: "Rika",
   permissions: [0],
   cooldowns: 5,
-  description: "Generate image using Flux AI",
+  description: "Generate image using AI",
   usage: "[prompt text]",
   category: "ai"
 };
@@ -20,13 +20,13 @@ async function onCall({ message, args }) {
 
   message.react("⏳");
 
-  const u = `http://65.109.80.126:20409/aryan/flux?prompt=${encodeURIComponent(p)}`;
+  const u = `https://image.pollinations.ai/prompt/${encodeURIComponent(p)}?width=1024&height=1024&nologo=true`;
 
   try {
-    const r = await axios.get(u, { responseType: 'stream' });
+    const r = await axios.get(u, { responseType: 'stream', timeout: 120000 });
 
     await message.reply({
-      body: `✅ Here is your Flux AI image!\n\n📝 Prompt: ${p}`,
+      body: `✅ Here is your AI image!\n\n📝 Prompt: ${p}`,
       attachment: r.data
     });
 
@@ -34,7 +34,7 @@ async function onCall({ message, args }) {
   } catch (e) {
     console.error("Flux API Error:", e.message || e);
     message.react("❌");
-    message.reply("⚠ Flux API theke image generate kora jacchhe na.");
+    message.reply("⚠ Image generate kora jacchhe na.");
   }
 }
 
