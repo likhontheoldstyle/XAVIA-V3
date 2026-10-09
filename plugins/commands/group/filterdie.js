@@ -12,30 +12,30 @@ const langData = {
     en_US: {
         notGroup: "This command only works in groups",
         botNotAdmin: "Bot needs to be group admin to remove members",
-        checking: "Checking {count} members for dead accounts...",
+        checking: "Checking group members for dead accounts...",
         noDie: "No dead accounts found. Group is clean!",
         removing: "Found {count} dead account(s). Removing...",
-        done: "Done! Removed {success} dead account(s){fail}",
+        done: "Removed {success} dead account(s){fail}",
         failPart: ", failed to remove {fail}",
         error: "An error occurred, please try again later",
     },
     vi_VN: {
         notGroup: "Lệnh này chỉ hoạt động trong nhóm",
         botNotAdmin: "Bot cần làm quản trị viên nhóm để xóa thành viên",
-        checking: "Đang kiểm tra {count} thành viên...",
+        checking: "Đang kiểm tra thành viên nhóm...",
         noDie: "Không tìm thấy tài khoản chết. Nhóm sạch!",
         removing: "Tìm thấy {count} tài khoản chết. Đang xóa...",
-        done: "Xong! Đã xóa {success} tài khoản chết{fail}",
+        done: "Đã xóa {success} tài khoản chết{fail}",
         failPart: ", thất bại {fail}",
         error: "Đã có lỗi xảy ra, vui lòng thử lại sau",
     },
     ar_SY: {
         notGroup: "هذا الأمر يعمل في المجموعات فقط",
         botNotAdmin: "يجب أن يكون البوت مشرفًا لإزالة الأعضاء",
-        checking: "جارٍ فحص {count} عضو...",
+        checking: "جارٍ فحص أعضاء المجموعة...",
         noDie: "لا توجد حسابات ميتة. المجموعة نظيفة!",
         removing: "تم العثور على {count} حساب ميت. جارٍ الإزالة...",
-        done: "تم! تمت إزالة {success} حساب ميت{fail}",
+        done: "تمت إزالة {success} حساب ميت{fail}",
         failPart: ", فشل إزالة {fail}",
         error: "حدث خطأ، يرجى المحاولة لاحقًا",
     },
@@ -53,20 +53,11 @@ function isBotAdmin(adminIDs, botID) {
     return adminIDs.some((e) => normID(e) == botID);
 }
 
-function getFreshAdminIDs(threadID) {
+function fetchThreadInfo(threadID) {
     return new Promise((resolve) => {
         global.api.getThreadInfo(threadID, (err, info) => {
             if (err || !info) return resolve(null);
-            resolve(info.adminIDs || null);
-        });
-    });
-}
-
-function checkAlive(uid) {
-    return new Promise((resolve) => {
-        global.api.getUserInfo([uid], (err, info) => {
-            if (err || !info || !info[uid] || !info[uid].name) resolve(false);
-            else resolve(true);
+            resolve(info);
         });
     });
 }
@@ -80,42 +71,43 @@ function removeUser(uid, threadID) {
 }
 
 async function onCall({ message, getLang, data }) {
-    const { threadID, isGroup, participantIDs } = message;
+    const { threadID, isGroup } = message;
     if (!isGroup) return message.reply(getLang("notGroup"));
     try {
-        let adminIDs = await getFreshAdminIDs(threadID);
-        if (!adminIDs && data.thread && data.thread.info)
-            adminIDs = data.thread.info.adminIDs;
+        let threadInfo = await fetchThreadInfo(threadID);
+        if (!threadInfo && data.thread && data.thread.info)
+            threadInfo = data.thread.info;
+        if (!threadInfo) return message.reply(getLang("error"));
+
+        const adminIDs = threadInfo.adminIDs || [];
         if (!isBotAdmin(adminIDs, global.botID))
             return message.reply(getLang("botNotAdmin"));
 
-        const targets = participantIDs.filter((id) => id != global.botID);
-        await message.reply(getLang("checking", { count: targets.length }));
+        await message.reply(getLang("checking"));
 
-        const dead = [];
-        for (const uid of targets) {
-            const alive = await checkAlive(uid);
-            if (!alive) {
-                await wait(500);
-                const aliveAgain = await checkAlive(uid);
-                if (!aliveAgain) dead.push(uid);
-            }
-            await wait(300);
-        }
+        const userInfo = threadInfo.userInfo || [];
+        const membersBlocked = userInfo.filter(
+            (user) =>
+                user.type !== "User" &&
+                !adminIDs.some((id) => normID(id) == user.id)
+        );
 
-        if (dead.length == 0) return message.reply(getLang("noDie"));
-        await message.reply(getLang("removing", { count: dead.length }));
+        if (membersBlocked.length == 0)
+            return message.reply(getLang("noDie"));
+        await message.reply(
+            getLang("removing", { count: membersBlocked.length })
+        );
 
         let success = 0,
             fail = 0;
-        for (const uid of dead) {
+        for (const user of membersBlocked) {
             try {
-                await removeUser(uid, threadID);
+                await removeUser(user.id, threadID);
                 success++;
             } catch (e) {
                 fail++;
             }
-            await wait(800);
+            await wait(700);
         }
 
         await message.reply(
