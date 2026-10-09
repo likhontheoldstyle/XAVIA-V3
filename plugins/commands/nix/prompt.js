@@ -1,84 +1,44 @@
 import axios from "axios";
 
-const GEMINI_KEY = "AQ.Ab8RN6KVRSqDx1tqiUTCgBN4vPEpmFn3i2F6KSKAEBXMux4NIg";
-const API = "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent";
+const API = "https://gemini-api-rose-zeta.vercel.app/api/ask";
 
 const config = {
   name: "prompt",
   aliases: ["p"],
-  version: "0.0.2",
+  version: "0.0.3",
   credits: "Rika",
   permissions: [0],
-  description: "Image analysis with AI prompt (Gemini)",
-  usage: "reply to an image with optional prompt",
+  description: "Ask AI (scraped Gemini)",
+  usage: "[your question]",
   category: "ai"
 };
 
 async function onCall({ message, args }) {
-  const prompt = args.join(" ") || "Describe this image";
-
-  if (message.type === "message_reply" && message.messageReply?.attachments?.[0]?.type === "photo") {
-    try {
-      message.react("⏳");
-      const att = message.messageReply.attachments[0];
-      const urls = [att.url, att.previewUrl].filter(Boolean);
-      if (!urls.length) throw new Error("No image URL in attachment");
-
-      const cookieHeader = (() => {
-        try {
-          const state = global.api?.getAppState?.() || [];
-          return state.map(c => `${c.key}=${c.value}`).join("; ");
-        } catch { return ""; }
-      })();
-
-      let img = null, dlErr = null;
-      for (const u of urls) {
-        try {
-          img = await axios.get(u, {
-            responseType: "arraybuffer",
-            headers: {
-              "User-Agent": "Mozilla/5.0 (Linux; Android 12) AppleWebKit/537.36 Chrome/120 Mobile Safari/537.36",
-              "Referer": "https://www.facebook.com/",
-              ...(cookieHeader ? { "Cookie": cookieHeader } : {})
-            },
-            maxContentLength: 20 * 1024 * 1024,
-            timeout: 30000
-          });
-          break;
-        } catch (e) { dlErr = e; }
-      }
-      if (!img) throw new Error("Image download failed: " + (dlErr?.message || dlErr));
-      const mime = img.headers["content-type"]?.split(";")[0] || "image/jpeg";
-      const b64 = Buffer.from(img.data).toString("base64");
-
-      let data;
-      try {
-        ({ data } = await axios.post(
-          `${API}?key=${GEMINI_KEY}`,
-          { contents: [{ parts: [{ text: prompt }, { inline_data: { mime_type: mime, data: b64 } }] }] },
-          { headers: { "Content-Type": "application/json" }, timeout: 60000 }
-        ));
-      } catch (apiErr) {
-        const apiMsg = apiErr.response?.data?.error?.message || apiErr.message;
-        throw new Error("Gemini API failed: " + apiMsg);
-      }
-
-      const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (!reply) throw new Error("No response from Gemini API.");
-
-      message.reply(reply);
-      return message.react("✅");
-    } catch (e) {
-      console.error("Gemini vision error:", e.message || e);
-      message.reply("❌ " + (e.message || "An error occurred while analyzing the image."));
-      return message.react("❌");
-    }
+  const prompt = args.join(" ");
+  if (!prompt) {
+    return message.reply("❌ Please provide a prompt.\nExample: prompt what is AI?");
   }
 
-  message.reply("⚠️ Please reply with an image.");
+  message.react("⏳");
+
+  try {
+    const { data } = await axios.get(API, {
+      params: { prompt },
+      timeout: 90000
+    });
+
+    if (!data?.success) throw new Error(data?.error || "API failed");
+
+    const reply = data.response || data.reply;
+    if (!reply) throw new Error("Empty response");
+
+    message.react("✅");
+    return message.reply(`🤖 ${reply}`);
+  } catch (e) {
+    console.error("Prompt API Error:", e.message || e);
+    message.react("❌");
+    return message.reply("⚠ AI theke reply asche na.");
+  }
 }
 
-export default {
-  config,
-  onCall
-};
+export default { config, onCall };
