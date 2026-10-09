@@ -35,6 +35,10 @@ function startServer(serverAdminPassword) {
         res.sendFile(path.resolve('core/dashboard/public', 'index.html'));
     });
 
+    app.get('/health', (req, res) => {
+        res.json({ status: true, uptime: Math.floor(process.uptime()) });
+    });
+
     app.use((req, res, next) => {
         if (req.headers['xva-access-token'] != serverAdminPassword) return res.status(401).send('Unauthorized');
         next();
