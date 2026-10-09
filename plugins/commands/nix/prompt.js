@@ -21,15 +21,32 @@ async function onCall({ message, args }) {
     try {
       message.react("⏳");
       const imageUrl = message.messageReply.attachments[0].url;
-      const img = await axios.get(imageUrl, { responseType: "arraybuffer" });
+      if (!imageUrl) throw new Error("No image URL in attachment");
+      let img;
+      try {
+        img = await axios.get(imageUrl, {
+          responseType: "arraybuffer",
+          headers: { "User-Agent": "Mozilla/5.0 (Linux; Android 12) AppleWebKit/537.36 Chrome/120 Mobile Safari/537.36" },
+          maxContentLength: 20 * 1024 * 1024,
+          timeout: 30000
+        });
+      } catch (dlErr) {
+        throw new Error("Image download failed: " + (dlErr.message || dlErr));
+      }
       const mime = img.headers["content-type"]?.split(";")[0] || "image/jpeg";
       const b64 = Buffer.from(img.data).toString("base64");
 
-      const { data } = await axios.post(
-        `${API}?key=${GEMINI_KEY}`,
-        { contents: [{ parts: [{ text: prompt }, { inline_data: { mime_type: mime, data: b64 } }] }] },
-        { headers: { "Content-Type": "application/json" } }
-      );
+      let data;
+      try {
+        ({ data } = await axios.post(
+          `${API}?key=${GEMINI_KEY}`,
+          { contents: [{ parts: [{ text: prompt }, { inline_data: { mime_type: mime, data: b64 } }] }] },
+          { headers: { "Content-Type": "application/json" }, timeout: 60000 }
+        ));
+      } catch (apiErr) {
+        const apiMsg = apiErr.response?.data?.error?.message || apiErr.message;
+        throw new Error("Gemini API failed: " + apiMsg);
+      }
 
       const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text;
       if (!reply) throw new Error("No response from Gemini API.");
@@ -38,7 +55,7 @@ async function onCall({ message, args }) {
       return message.react("✅");
     } catch (e) {
       console.error("Gemini vision error:", e.message || e);
-      message.reply("❌ An error occurred while analyzing the image.");
+      message.reply("❌ " + (e.message || "An error occurred while analyzing the image."));
       return message.react("❌");
     }
   }
