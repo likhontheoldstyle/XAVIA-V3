@@ -13,7 +13,6 @@ const config = {
 const langData = {
     en_US: {
         missingUrl: "Please provide a valid URL. Usage: /alldown <URL>",
-        downloading: "⏳ Downloading video...",
         fetchFail:
             "Failed to fetch video details. Please check the URL and try again.",
         downloadFail:
@@ -21,14 +20,12 @@ const langData = {
     },
     vi_VN: {
         missingUrl: "Vui lòng cung cấp URL hợp lệ. Cách dùng: /alldown <URL>",
-        downloading: "⏳ Đang tải video...",
         fetchFail:
             "Không lấy được thông tin video. Vui lòng kiểm tra URL và thử lại.",
         downloadFail: "Đã xảy ra lỗi khi tải video. Vui lòng thử lại.",
     },
     ar_SY: {
         missingUrl: "يرجى تقديم رابط صالح. الاستخدام: /alldown <URL>",
-        downloading: "⏳ جارٍ تنزيل الفيديو...",
         fetchFail: "فشل في جلب تفاصيل الفيديو. تحقق من الرابط وحاول مجددًا.",
         downloadFail: "حدث خطأ أثناء تنزيل الفيديو. حاول مجددًا.",
     },
@@ -43,21 +40,26 @@ async function onCall({ message, args, getLang }) {
 }
 
 export async function downloadAndSend(message, url, getLang) {
-    const { reply } = message;
+    const { reply, react } = message;
     try {
         const { data } = await axios.get(
             `https://nayan-video-downloader.vercel.app/alldown?url=${encodeURIComponent(url)}`
         );
-        if (!data?.data?.low) return reply(getLang("fetchFail"));
+        if (!data?.data?.low) {
+            if (react) await react("❌").catch(() => {});
+            return reply(getLang("fetchFail"));
+        }
         const { title, low } = data.data;
-        await reply(getLang("downloading"));
+        if (react) await react("⏳").catch(() => {});
         const stream = await getStream(low);
         await reply({
             body: `🎥 *Video Details* 🎥\n\n*Title:* ${title || "Video"}`,
             attachment: stream,
         });
+        if (react) await react("✅").catch(() => {});
     } catch (e) {
         console.error(e);
+        if (react) await react("❌").catch(() => {});
         reply(getLang("downloadFail"));
     }
 }
