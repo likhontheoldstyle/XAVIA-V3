@@ -43,6 +43,25 @@ const langData = {
 
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
+function normID(e) {
+    if (e && typeof e === "object") return e.id || e.userID || e.userFbId;
+    return e;
+}
+
+function isBotAdmin(adminIDs, botID) {
+    if (!Array.isArray(adminIDs)) return false;
+    return adminIDs.some((e) => normID(e) == botID);
+}
+
+function getFreshAdminIDs(threadID) {
+    return new Promise((resolve) => {
+        global.api.getThreadInfo(threadID, (err, info) => {
+            if (err || !info) return resolve(null);
+            resolve(info.adminIDs || null);
+        });
+    });
+}
+
 function checkAlive(uid) {
     return new Promise((resolve) => {
         global.api.getUserInfo([uid], (err, info) => {
@@ -64,8 +83,10 @@ async function onCall({ message, getLang, data }) {
     const { threadID, isGroup, participantIDs } = message;
     if (!isGroup) return message.reply(getLang("notGroup"));
     try {
-        const { adminIDs } = data.thread.info;
-        if (!adminIDs.some((e) => e == global.botID))
+        let adminIDs = await getFreshAdminIDs(threadID);
+        if (!adminIDs && data.thread && data.thread.info)
+            adminIDs = data.thread.info.adminIDs;
+        if (!isBotAdmin(adminIDs, global.botID))
             return message.reply(getLang("botNotAdmin"));
 
         const targets = participantIDs.filter((id) => id != global.botID);
