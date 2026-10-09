@@ -1,6 +1,3 @@
-// CLEAN REWRITE of core/handlers/listen.js
-// Manually reverse-engineered: control-flow flattened + identifiers renamed by hand.
-// Behavior is identical to the original obfuscated file.
 
 import moment from "moment-timezone";
 import handleEvents from "./events.js";
