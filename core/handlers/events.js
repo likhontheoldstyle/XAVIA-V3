@@ -1,6 +1,3 @@
-// CLEAN REWRITE of core/handlers/events.js
-// Manually reverse-engineered: control-flow flattened + identifiers renamed by hand.
-// Behavior is identical to the original obfuscated file.
 
 import { readFileSync, existsSync } from "fs";
 import { resolve as resolvePath } from "path";
