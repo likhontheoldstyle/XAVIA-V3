@@ -74,7 +74,7 @@ async function onCall({ message, args }) {
 
     message.react("✅");
     return message.reply(
-      `✅ Uploaded to ImgBB!\n\n🔗 Link: ${data.data.display_url}\n🖼 Viewer: ${data.data.url_viewer}\n📐 ${data.data.width}x${data.data.height}`
+      `╭────────────❍\n╰➤ 🟢『 𝐈𝐌𝐆𝐁𝐁 𝐔𝐏𝐋𝐎𝐀𝐃𝐄𝐃 』\n\n╰➤ 📎 𝐋𝐈𝐍𝐊 : ${data.data.display_url}\n\n╰➤🔎 𝐕𝐈𝐄𝐖𝐄𝐑 : ${data.data.url_viewer}\n\n╰➤ 📐 𝐒𝐈𝐙𝐄 : ${data.data.width}x${data.data.height}\n╰─────────────────➤`
     );
   } catch (e) {
     console.error("ImgBB Error:", e.message || e);
