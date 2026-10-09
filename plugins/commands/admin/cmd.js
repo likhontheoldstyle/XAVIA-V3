@@ -13,7 +13,7 @@ const config = {
     description: "Manage command files - load, unload, install commands",
     usage: "load <name> | loadall | unload <name> | install <url> <filename>",
     category: "admin",
-    nixprefix: false
+    rikaprefix: false
 };
 
 const langData = {
