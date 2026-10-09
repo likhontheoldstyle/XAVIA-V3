@@ -20,19 +20,34 @@ async function onCall({ message, args }) {
   if (message.type === "message_reply" && message.messageReply?.attachments?.[0]?.type === "photo") {
     try {
       message.react("⏳");
-      const imageUrl = message.messageReply.attachments[0].url;
-      if (!imageUrl) throw new Error("No image URL in attachment");
-      let img;
-      try {
-        img = await axios.get(imageUrl, {
-          responseType: "arraybuffer",
-          headers: { "User-Agent": "Mozilla/5.0 (Linux; Android 12) AppleWebKit/537.36 Chrome/120 Mobile Safari/537.36" },
-          maxContentLength: 20 * 1024 * 1024,
-          timeout: 30000
-        });
-      } catch (dlErr) {
-        throw new Error("Image download failed: " + (dlErr.message || dlErr));
+      const att = message.messageReply.attachments[0];
+      const urls = [att.url, att.previewUrl].filter(Boolean);
+      if (!urls.length) throw new Error("No image URL in attachment");
+
+      const cookieHeader = (() => {
+        try {
+          const state = global.api?.getAppState?.() || [];
+          return state.map(c => `${c.key}=${c.value}`).join("; ");
+        } catch { return ""; }
+      })();
+
+      let img = null, dlErr = null;
+      for (const u of urls) {
+        try {
+          img = await axios.get(u, {
+            responseType: "arraybuffer",
+            headers: {
+              "User-Agent": "Mozilla/5.0 (Linux; Android 12) AppleWebKit/537.36 Chrome/120 Mobile Safari/537.36",
+              "Referer": "https://www.facebook.com/",
+              ...(cookieHeader ? { "Cookie": cookieHeader } : {})
+            },
+            maxContentLength: 20 * 1024 * 1024,
+            timeout: 30000
+          });
+          break;
+        } catch (e) { dlErr = e; }
       }
+      if (!img) throw new Error("Image download failed: " + (dlErr?.message || dlErr));
       const mime = img.headers["content-type"]?.split(";")[0] || "image/jpeg";
       const b64 = Buffer.from(img.data).toString("base64");
 
