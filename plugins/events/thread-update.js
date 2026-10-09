@@ -62,7 +62,7 @@ export default async function ({ event }) {
 
                 if (
                     !smallCheck &&
-                    getThreadData?.notifyChange?.status === true
+                    (getThreadData?.notifyChange?.status === true || getThreadData?.notifyChange?.inGroup === true)
                 ) {
                     const authorName =
                         (await Users.getInfo(author))?.name || author;
@@ -96,7 +96,7 @@ export default async function ({ event }) {
                     ).slice(2);
 
                     await Threads.updateInfo(threadID, { color: newColor });
-                    if (getThreadData?.notifyChange?.status === true) {
+                    if ((getThreadData?.notifyChange?.status === true || getThreadData?.notifyChange?.inGroup === true)) {
                         const authorName =
                             (await Users.getInfo(author))?.name || author;
 
@@ -128,7 +128,7 @@ export default async function ({ event }) {
                         logMessageData.theme_emoji;
 
                     await Threads.updateInfo(threadID, { emoji: newEmoji });
-                    if (getThreadData?.notifyChange?.status === true) {
+                    if ((getThreadData?.notifyChange?.status === true || getThreadData?.notifyChange?.inGroup === true)) {
                         const authorName =
                             (await Users.getInfo(author))?.name || author;
 
@@ -153,7 +153,7 @@ export default async function ({ event }) {
                 await Threads.updateInfo(threadID, {
                     approvalMode: getThreadInfo.approvalMode,
                 });
-                if (getThreadData?.notifyChange?.status === true) {
+                if ((getThreadData?.notifyChange?.status === true || getThreadData?.notifyChange?.inGroup === true)) {
                     const authorName =
                         (await Users.getInfo(author))?.name || author;
 
@@ -185,7 +185,7 @@ export default async function ({ event }) {
 
             await Threads.updateInfo(threadID, { adminIDs: adminIDs });
 
-            if (getThreadData?.notifyChange?.status === true) {
+            if ((getThreadData?.notifyChange?.status === true || getThreadData?.notifyChange?.inGroup === true)) {
                 const authorName =
                     (await Users.getInfo(author))?.name || author;
                 const targetName =
@@ -212,6 +212,9 @@ export default async function ({ event }) {
         for (const rUID of getThreadData.notifyChange.registered) {
             global.sleep(300);
             api.sendMessage(atlertMsg, rUID);
+        }
+        if (getThreadData.notifyChange.inGroup === true) {
+            api.sendMessage(atlertMsg, threadID);
         }
     }
 
