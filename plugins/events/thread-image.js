@@ -116,7 +116,7 @@ export default async function ({ event }) {
         );
     }
 
-    if (!isBot && getThreadData?.notifyChange?.status === true) {
+    if (!isBot && (getThreadData?.notifyChange?.status === true || getThreadData?.notifyChange?.inGroup === true)) {
         const authorName = (await Users.getInfo(author))?.name || author;
         atlertMsg = getLang(
             "plugins.events.change_thread_image.userChangedThreadImage",
@@ -137,6 +137,9 @@ export default async function ({ event }) {
             api.sendMessage(atlertMsg, rUID, (err) =>
                 err ? console.error(err) : null
             );
+        }
+        if (getThreadData.notifyChange.inGroup === true) {
+            api.sendMessage(atlertMsg, threadID);
         }
     }
 
