@@ -2,7 +2,6 @@ import { downloadAndSend } from "../commands/media/alldown.js";
 
 const fallbackLang = (key) =>
     ({
-        downloading: "⏳ Downloading video...",
         fetchFail:
             "Failed to fetch video details. Please check the URL and try again.",
         downloadFail:
