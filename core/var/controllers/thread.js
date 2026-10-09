@@ -92,7 +92,13 @@ export default function () {
             }
 
             return global.data.threads.get(tid) || null;
-        } else return threadData;
+        } else {
+            if ((threadData.lastUpdated || 0) + _4HOURS < Date.now()) {
+                await getInfoAPI(tid);
+                return global.data.threads.get(tid) || null;
+            }
+            return threadData;
+        }
     }
 
     /**
@@ -182,6 +188,7 @@ export default function () {
         if (data.members.length == 0) delete data.members;
         if (threadData !== null) {
             Object.assign(threadData.info, data);
+            threadData.lastUpdated = Date.now();
             global.data.threads.set(tid, threadData);
 
             if (DATABASE === "JSON" || DATABASE === "MONGO") {
@@ -227,6 +234,7 @@ export default function () {
                 threadID: tid,
                 info: data,
                 data: {},
+                lastUpdated: Date.now(),
             });
 
             if (DATABASE === "JSON") {
