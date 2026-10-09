@@ -22,8 +22,22 @@ async function onCall({ message, args }) {
 
   const u = `https://image.pollinations.ai/prompt/${encodeURIComponent(p)}?width=1024&height=1024&nologo=true`;
 
+  let r = null, lastErr = null;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      r = await axios.get(u, { responseType: 'stream', timeout: 120000 });
+      const ct = r.headers['content-type'] || '';
+      if (!ct.startsWith('image/')) throw new Error('API returned ' + ct);
+      break;
+    } catch (e) {
+      lastErr = e;
+      r = null;
+      if (attempt < 2) await new Promise(res => setTimeout(res, (attempt + 1) * 8000));
+    }
+  }
+
   try {
-    const r = await axios.get(u, { responseType: 'stream', timeout: 120000 });
+    if (!r) throw lastErr || new Error('No response');
 
     await message.reply({
       body: `✅ Here is your AI image!\n\n📝 Prompt: ${p}`,
