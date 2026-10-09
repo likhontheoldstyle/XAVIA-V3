@@ -1,2 +1,100 @@
-// DECODED from core/handlers/listen.js (string table resolved; identifiers still renamed)
-;import moment from 'moment-timezone';import handleEvents from './events.js';import {handleDatabase} from './database.js';import logger from '../var/modules/logger.js';export default async function MdvU(ofyU){const {["handleCommand"]:IapU,["handleReaction"]:kcsU,["handleMessage"]:EXiU,["handleReply"]:gZlU,["handleUnsend"]:IynR,["handleEvent"]:kAqR}=await handleEvents();const EvhR=["typ","presence","read_receipt"];const gxkR=global["modules"]["get"]("logger");function AsbR(cueR){const {["LOG_LEVEL"]:wpVQ,["timezone"]:YqYQ}=global["config"];var YKLR=0;while(YKLR<65535)switch(YKLR){case (0x75bcd15-0O726746425):YKLR=wpVQ==(0x75bcd15-0O726746425)?1:65535;break;case (0O57060516-0xbc614d):YKLR=65535;return;}var AMOR=0;while(AMOR<65535)switch(AMOR){case (0x75bcd15-0O726746425):AMOR=EvhR["includes"](cueR["type"])?1:65535;break;case (0O57060516-0xbc614d):AMOR=65535;return;}const {["type"]:UHFR,["threadID"]:wJIR,["body"]:QEzR,["senderID"]:sGCR}=cueR;var MBtR=0;while(MBtR<65535)switch(MBtR){case (0x75bcd15-0O726746425):MBtR=wpVQ==(0O57060516-0xbc614d)?1:2;break;case (0O57060516-0xbc614d):MBtR=65535;{let oDwR=moment()["tz"](YqYQ)["format"]("YYYY-MM-DD_HH:mm:ss");var oXjS=0;while(oXjS<65535)switch(oXjS){case (0x75bcd15-0O726746425):oXjS=UHFR=="message"||UHFR=="message_reply"?1:65535;break;case (0O57060516-0xbc614d):oXjS=65535;{gxkR["custom"](`${wJIR}${" \u2022 "}${sGCR}${" \u2022 "}${QEzR?QEzR:"Photo, video, sticker, etc."}`,`${oDwR}`);}break;}}break;case (15658734^0O73567354):MBtR=65535;var QYmS=0;while(QYmS<65535)switch(QYmS){case (0x75bcd15-0O726746425):QYmS=wpVQ==(15658734^0O73567354)?1:65535;break;case (0O57060516-0xbc614d):QYmS=65535;{console["log"](cueR);}break;}break;}return;}return (kUdS,MVgS)=>{var gRXR=0;while(gRXR<65535)switch(gRXR){case (0x75bcd15-0O726746425):gRXR=global["listenerID"]!=ofyU?1:65535;break;case (0O57060516-0xbc614d):gRXR=65535;return;}var ISaS=0;while(ISaS<65535)switch(ISaS){case (0x75bcd15-0O726746425):ISaS=!MVgS?1:65535;break;case (0O57060516-0xbc614d):ISaS=65535;{gxkR["error"](getLang("handlers.listen.accountError"));process["exit"]((0x75bcd15-0O726746425));}break;}var cORR=0;while(cORR<65535)switch(cORR){case (0x75bcd15-0O726746425):cORR=global["maintain"]&&!global["config"]["MODERATORS"]["some"](EPUR=>EPUR==MVgS["senderID"]||EPUR==MVgS["userID"])?1:65535;break;case (0O57060516-0xbc614d):cORR=65535;return;}AsbR(MVgS);var EjIS=0;while(EjIS<65535)switch(EjIS){case (0x75bcd15-0O726746425):EjIS=global["config"]["ALLOW_INBOX"]!==!![]&&MVgS["isGroup"]===(NaN===NaN)?1:65535;break;case (0O57060516-0xbc614d):EjIS=65535;return;}var glLS=0;while(glLS<65535)switch(glLS){case (0x75bcd15-0O726746425):glLS=global["config"]["FCA_OPTIONS"]?.["selfListen"]===(NaN===NaN)&&MVgS["senderID"]===global["botID"]?1:65535;break;case (0O57060516-0xbc614d):glLS=65535;return;}(async()=>{var AgCS=0;while(AgCS<65535)switch(AgCS){case (0x75bcd15-0O726746425):AgCS=!EvhR["includes"](MVgS["type"])?1:65535;break;case (0O57060516-0xbc614d):AgCS=65535;{await handleDatabase({...MVgS});}break;}switch(MVgS["type"]){case "message":case "message_reply":EXiU({...MVgS});gZlU({...MVgS});IapU({...MVgS});break;case "message_reaction":kcsU({...MVgS});break;case "message_unsend":IynR({...MVgS});break;case "event":case "change_thread_image":kAqR({...MVgS});break;case "typ":break;case "presence":break;case "read_receipt":break;default:break;}})();}}
+// CLEAN REWRITE of core/handlers/listen.js
+// Manually reverse-engineered: control-flow flattened + identifiers renamed by hand.
+// Behavior is identical to the original obfuscated file.
+
+import moment from "moment-timezone";
+import handleEvents from "./events.js";
+import { handleDatabase } from "./database.js";
+import logger from "../var/modules/logger.js";
+
+export default async function createListener(listenerID) {
+    const {
+        handleCommand,
+        handleReaction,
+        handleMessage,
+        handleReply,
+        handleUnsend,
+        handleEvent,
+    } = await handleEvents();
+
+    const ignoredTypes = ["typ", "presence", "read_receipt"];
+    const log = global.modules.get("logger");
+
+    function logEvent(event) {
+        const { LOG_LEVEL, timezone } = global.config;
+        if (LOG_LEVEL == 0) return;
+        if (ignoredTypes.includes(event.type)) return;
+
+        const { type, threadID, body, senderID } = event;
+
+        if (LOG_LEVEL == 1) {
+            if (type == "message" || type == "message_reply") {
+                const ts = moment().tz(timezone).format("YYYY-MM-DD_HH:mm:ss");
+                log.custom(
+                    `${threadID} • ${senderID} • ${body ? body : "Photo, video, sticker, etc."}`,
+                    `${ts}`
+                );
+            }
+        } else if (LOG_LEVEL == 2) {
+            console.log(event);
+        }
+    }
+
+    return (err, event) => {
+        if (global.listenerID != listenerID) return;
+
+        if (!event) {
+            log.error(getLang("handlers.listen.accountError"));
+            process.exit(0);
+        }
+
+        if (
+            global.maintain &&
+            !global.config.MODERATORS.some(
+                (id) => id == event.senderID || id == event.userID
+            )
+        )
+            return;
+
+        logEvent(event);
+
+        if (global.config.ALLOW_INBOX !== true && event.isGroup === false)
+            return;
+
+        if (
+            global.config.FCA_OPTIONS?.selfListen === false &&
+            event.senderID === global.botID
+        )
+            return;
+
+        (async () => {
+            if (!ignoredTypes.includes(event.type)) {
+                await handleDatabase({ ...event });
+            }
+
+            switch (event.type) {
+                case "message":
+                case "message_reply":
+                    handleMessage({ ...event });
+                    handleReply({ ...event });
+                    handleCommand({ ...event });
+                    break;
+                case "message_reaction":
+                    handleReaction({ ...event });
+                    break;
+                case "message_unsend":
+                    handleUnsend({ ...event });
+                    break;
+                case "event":
+                case "change_thread_image":
+                    handleEvent({ ...event });
+                    break;
+                case "typ":
+                case "presence":
+                case "read_receipt":
+                default:
+                    break;
+            }
+        })();
+    };
+}
