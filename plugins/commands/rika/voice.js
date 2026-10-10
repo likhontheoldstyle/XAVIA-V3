@@ -15,7 +15,34 @@ const config = {
 };
 
 async function onCall({ message, args }) {
-  const name = args[0]?.toLowerCase();
+  const sub = args[0]?.toLowerCase();
+
+  if (sub === "upload") {
+    const name = args[1]?.toLowerCase();
+    if (!name) return message.reply("❌ Usage: reply to audio with /voice upload {name}");
+
+    const replied = message.messageReply;
+    const audio = replied?.attachments?.find(a => a.type === "audio");
+    if (!audio) return message.reply("❌ Audio-te reply diye command daw.");
+
+    try {
+      message.react("⏳");
+      const r = await axios.get(audio.url, { responseType: "arraybuffer", timeout: 60000 });
+      const b64 = Buffer.from(r.data).toString("base64");
+
+      const { data } = await axios.post(`${API}/upload`, { name, audio: b64 }, { timeout: 60000 });
+      message.react("✅");
+      return message.reply(
+        `╭────────────❍\n╰➤ 🎙『 𝐕𝐎𝐈𝐂𝐄 𝐔𝐏𝐋𝐎𝐀𝐃𝐄𝐃 』\n\n╰➤ 📁 ${data.name || name}.mp3\n╰➤ 🗣 /voice ${data.name || name}\n╰─────────────────➤`
+      );
+    } catch (e) {
+      console.error("Voice Upload Error:", e.message || e);
+      message.react("❌");
+      return message.reply("⚠ Upload failed. Audio 10MB-er niche hote hobe.");
+    }
+  }
+
+  const name = sub;
 
   try {
     if (!name) {
