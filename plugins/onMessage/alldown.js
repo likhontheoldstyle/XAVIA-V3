@@ -16,6 +16,7 @@ async function onCall({ message, data }) {
     const prefix = data?.thread?.data?.prefix || global.config?.PREFIX || "/";
     if (text.startsWith(prefix)) return;
     const url = text.split(/\s+/)[0];
+    if (/xnxx\.(com|videos\.me)/i.test(url)) return;
     await downloadAndSend(message, url, fallbackLang);
 }
 
