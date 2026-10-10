@@ -17,30 +17,35 @@ const config = {
 };
 
 async function downloadAndSendVideo(message, videoUrl, msg) {
+  const clean = () => { if (msg) msg.unsend().catch(() => {}); };
   try {
     const { data } = await axios.get(`${API}/video`, {
       params: { url: videoUrl },
       timeout: 60000
     });
     const dlUrl = data?.download_url;
-    if (!dlUrl) throw new Error("No download URL.");
+    if (!dlUrl) throw new Error("No download URL from API.");
 
     const title = (data.title || "xnxx_video").replace(/[\\/:"*?<>|]/g, "").slice(0, 50);
     const save = join(global.cachePath, `${title}_${Date.now()}.mp4`);
 
-    const res = await axios.get(dlUrl, { responseType: "arraybuffer", timeout: 120000 });
-    writeFileSync(save, Buffer.from(res.data));
+    const res = await axios.get(dlUrl, { responseType: "arraybuffer", timeout: 180000 });
+    const buf = Buffer.from(res.data);
+    if (buf.length > 24 * 1024 * 1024) {
+      clean();
+      return message.reply("❌ Video too large (>24MB), Messenger-e pathano jabe na.");
+    }
+    writeFileSync(save, buf);
 
     await message.reply({
       body: `🎬 ${data.title}`,
       attachment: createReadStream(save)
-    }).then(() => unlinkSync(save));
-
-    if (msg) msg.unsend().catch(() => {});
+    }).then(() => unlinkSync(save)).catch(() => unlinkSync(save));
+    clean();
   } catch (e) {
     console.error("XNXX download error:", e.message);
-    message.reply("❌ Video download failed.");
-    if (msg) msg.unsend().catch(() => {});
+    clean();
+    message.reply("❌ Video download failed: " + (e.message || "unknown error"));
   }
 }
 
