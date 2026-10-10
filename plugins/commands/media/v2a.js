@@ -91,7 +91,7 @@ async function onCall({ message, getLang }) {
         await downloadFile(att.url, inPath);
         await convertToMp3(inPath, outPath);
         const stream = await getStream(outPath);
-        await reply({ body: getLang("done"), attachment: stream });
+        await reply({ attachment: stream });
         if (react) await react("✅").catch(() => {});
     } catch (e) {
         console.error(e);
