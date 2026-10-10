@@ -1,12 +1,11 @@
 import axios from "axios";
 
-const GEMINI_KEY = "AQ.Ab8RN6KVRSqDx1tqiUTCgBN4vPEpmFn3i2F6KSKAEBXMux4NIg";
-const API = "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent";
+const API = "https://gemini-api-rose-zeta.vercel.app/api/ask";
 
 const config = {
   name: "gemini",
   aliases: ["ai", "chat"],
-  version: "0.0.2",
+  version: "0.0.3",
   credits: "Rika",
   permissions: [0],
   cooldowns: 3,
@@ -17,12 +16,11 @@ const config = {
 };
 
 async function askGemini(prompt) {
-  const { data } = await axios.post(
-    `${API}?key=${GEMINI_KEY}`,
-    { contents: [{ parts: [{ text: prompt }] }] },
-    { headers: { "Content-Type": "application/json" } }
-  );
-  const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+  const { data } = await axios.get(API, {
+    params: { prompt },
+    timeout: 90000
+  });
+  const reply = data?.response || data?.reply;
   if (!reply) throw new Error("No response from Gemini API.");
   return reply;
 }
