@@ -138,14 +138,16 @@ export default async function ({ event }) {
     let oldMembersLength = getThreadInfo.members.length - joinNameArray.length;
     let newCount = joinNameArray.map((_, i) => i + oldMembersLength + 1);
 
+    let welcomeText = (getThreadData?.joinMessage
+        ? getThreadData.joinMessage
+        : getLang("plugins.events.subcribe.welcome")
+    )
+        .replace(/\{members}/g, joinNameArray.join(", "))
+        .replace(/\{newCount}/g, newCount.join(", "))
+        .replace(/\{threadName}/g, getThreadInfo.name || threadID);
+
     let atlertMsg = {
-        body: (getThreadData?.joinMessage
-            ? getThreadData.joinMessage
-            : getLang("plugins.events.subcribe.welcome")
-        )
-            .replace(/\{members}/g, joinNameArray.join(", "))
-            .replace(/\{newCount}/g, newCount.join(", "))
-            .replace(/\{threadName}/g, getThreadInfo.name || threadID),
+        body: `╭────────────❍\n╰➤ 🎉『 𝐖𝐄𝐋𝐂𝐎𝐌𝐄 』\n╰─────────────────➤\n\n${welcomeText}`,
         mentions,
     };
 
@@ -153,7 +155,7 @@ export default async function ({ event }) {
 
     if (logMessageData.addedParticipants.length == 1 && warns.length == 0) {
         const welcomeBanner = await global
-            .getStream("https://i.ibb.co/4wxfqvdS/upload-1791613662746.webp")
+            .getStream("https://i.ibb.co/CK4Dp67D/upload-1791614181581.webp")
             .catch(() => null);
 
         if (welcomeBanner) atlertMsg.attachment = [welcomeBanner];
