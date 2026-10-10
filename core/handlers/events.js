@@ -226,17 +226,7 @@ async function handleCommand(event) {
         const input = args[0].slice(prefix.length)?.toLowerCase?.();
         const langFile = resolvePath("./language/rika.txt");
         if (!input) {
-            let msg = `The command you are using does not exist, type ${prefix}help to see all available commands`;
-            try {
-                if (existsSync(langFile)) {
-                    const content = readFileSync(langFile, "utf8");
-                    const m = content.match(/prefix=(.+)/);
-                    if (m) msg = m[1].replace("{prefix}", prefix);
-                }
-            } catch (e) {
-                console.error("Error reading language/rika.txt:", e);
-            }
-            api.sendMessage(msg, threadID, messageID);
+            return;
         } else {
             let msg = `Command "${input}" does not exist, type ${prefix}help to see all available commands`;
             try {
