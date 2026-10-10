@@ -3,7 +3,7 @@ import { createWriteStream, createReadStream, unlinkSync } from "fs";
 import { join } from "path";
 
 const aryan = "https://nix-album-api.vercel.app";
-const nix = "http://65.109.80.126:20409/aryan/imgur";
+const rika = "http://65.109.80.126:20409/aryan/imgur";
 
 const config = {
   name: "album",
@@ -81,7 +81,7 @@ async function onCall({ message, args }) {
     }
 
     try {
-      const imgurResponse = await axios.get(nix, {
+      const imgurResponse = await axios.get(rika, {
         params: { url: videoUrl }
       });
 
