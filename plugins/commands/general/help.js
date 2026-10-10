@@ -12,7 +12,7 @@ const config = {
 
 const langData = {
     "en_US": {
-        "help.list": "{list}\n\n⇒ Total: {total} commands\n⇒ Use {syntax} [command] to get more information about a command.",
+        "help.list": "{list}\n\n‎╭────────────❍\n╰➤ ⚙️『 Total: {total} commands 』\n\n╰➤ 🗣 {syntax}help [cmd] to get info\n╰─────────────────➤",
         "help.commandNotExists": "Command {command} does not exists.",
         "help.commandDetails": `
             ⇒ Name: {name}
@@ -66,6 +66,17 @@ const langData = {
     }
 }
 
+const catStyle = {
+    admin: ["👑", "𝐀𝐃𝐌𝐈𝐍"],
+    ai: ["🤖", "𝐀𝐈"],
+    economy: ["💰", "𝐄𝐂𝐎𝐍𝐎𝐌𝐘"],
+    general: ["📋", "𝐆𝐄𝐍𝐄𝐑𝐀𝐋"],
+    group: ["👥", "𝐆𝐑𝐎𝐔𝐏"],
+    media: ["🎬", "𝐌𝐄𝐃𝐈𝐀"],
+    nix: ["✨", "𝐍𝐈𝐗"],
+    tools: ["🛠️", "𝐓𝐎𝐎𝐋𝐒"]
+};
+
 function getCommandName(commandName) {
     if (global.plugins.commandsAliases.has(commandName)) return commandName;
 
@@ -93,7 +104,10 @@ async function onCall({ message, args, getLang, userPermissions, prefix }) {
         }
 
         let list = Object.keys(commands)
-            .map(category => `⌈ ${category.toUpperCase()} ⌋\n${commands[category].join(", ")}`)
+            .map(category => {
+                const [emoji, name] = catStyle[category.toLowerCase()] || ["📌", category.toUpperCase()];
+                return `╭─ ${emoji} ⌈ ${name} ⌋\n│ ${commands[category].join(", ")}\n╰─────────────────────➤`;
+            })
             .join("\n\n");
 
         message.reply(getLang("help.list", {
