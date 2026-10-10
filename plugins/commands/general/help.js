@@ -16,15 +16,27 @@ const langData = {
         "help.list": "{list}\n\n‎╭────────────❍\n╰➤ ⚙️『 Total: {total} commands 』\n\n╰➤ 🗣 {syntax}help [cmd] to get info\n╰─────────────────➤",
         "help.commandNotExists": "Command {command} does not exists.",
         "help.commandDetails": `
-            ⇒ Name: {name}
-            ⇒ Aliases: {aliases}
-            ⇒ Version: {version}
-            ⇒ Description: {description}
-            ⇒ Usage: {usage}
-            ⇒ Permissions: {permissions}
-            ⇒ Category: {category}
-            ⇒ Cooldown: {cooldown}
-            ⇒ Credits: {credits}
+╭────────────❍
+╰➤ 📂『 {uname} 』
+
+╰➤ 🏷️ 𝐍𝐀𝐌𝐄: {name}
+
+╰➤ 🔗 𝐀𝐋𝐈𝐀𝐒𝐄𝐒: {aliases}
+
+╰➤ 🆚 𝐕𝐄𝐑𝐒𝐈𝐎𝐍: {version}
+
+╰➤ 📝 𝐃𝐄𝐒𝐂𝐑𝐈𝐏𝐓𝐈𝐎𝐍: {description}
+
+╰➤ 💡 𝐔𝐒𝐀𝐆𝐄: {usage}
+
+╰➤ 👤 𝐏𝐄𝐑𝐌𝐈𝐒𝐒𝐈𝐎𝐍𝐒: {permissions}
+
+╰➤ 📁 𝐂𝐀𝐓𝐄𝐆𝐎𝐑𝐘: {category}
+
+╰➤ ⏱️ 𝐂𝐎𝐎𝐋𝐃𝐎𝐖𝐍: {cooldown}s
+
+╰➤ ✨ 𝐂𝐑𝐄𝐃𝐈𝐓𝐒: {credits}
+╰─────────────────➤
         `,
         "0": "Member",
         "1": "Group Admin",
@@ -128,6 +140,7 @@ async function onCall({ message, args, getLang, userPermissions, prefix }) {
 
         message.reply(getLang("help.commandDetails", {
             name: command.name,
+            uname: command.name.toUpperCase(),
             aliases: command.aliases.join(", "),
             version: command.version || "1.0.0",
             description: command.description || '',
