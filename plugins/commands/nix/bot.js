@@ -24,6 +24,7 @@ const config = {
     permissions: [0],
     credits: "Mohammad Nayan",
     rikaprefix: true,
+    category: "nix"
 };
 
 const langData = {
