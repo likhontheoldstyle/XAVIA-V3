@@ -9,7 +9,7 @@ const config = {
   cooldowns: 5,
   description: "Generate image using AI",
   usage: "[prompt text]",
-  category: "ai"
+  category: "nix"
 };
 
 async function onCall({ message, args }) {
