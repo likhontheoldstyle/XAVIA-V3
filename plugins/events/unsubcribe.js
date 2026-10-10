@@ -58,18 +58,25 @@ export default async function ({ event }) {
     let callback = async () => {
         const leftName = (await Users.getInfo(logMessageData.leftParticipantFbId))?.name || logMessageData.leftParticipantFbId;
 
+        let leaveText = (getThread?.data?.leaveMessage ?
+            getThread.data.leaveMessage : getLang(`plugins.events.unsubcribe.${type}`))
+            .replace(/\{leftName}/g, leftName);
+
         let atlertMsg = {
-            body: (getThread?.data?.leaveMessage ?
-                getThread.data.leaveMessage : getLang(`plugins.events.unsubcribe.${type}`))
-                .replace(/\{leftName}/g, leftName),
+            body: `╭────────────❍\n╰➤ 👋『 𝐅𝐀𝐑𝐄𝐖𝐄𝐋𝐋 』\n╰─────────────────➤\n\n${leaveText}`,
             mentions: [{
                 tag: leftName,
                 id: logMessageData.leftParticipantFbId
             }]
         }
 
+        const leaveBanner = await global
+            .getStream("https://i.ibb.co/sTtdCKS/upload-1791614497247.webp")
+            .catch(() => null);
+        if (leaveBanner) atlertMsg.attachment = [leaveBanner];
+
         const gifPath = `${global.mainPath}/plugins/events/unsubcribeGifs/${threadID}.gif`;
-        if (global.isExists(gifPath)) {
+        if (!atlertMsg.attachment && global.isExists(gifPath)) {
             atlertMsg.attachment = [await global.getStream(gifPath)];
         }
 
