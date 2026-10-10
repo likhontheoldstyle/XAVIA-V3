@@ -1,7 +1,8 @@
 const config = {
     name: "uptime",
     aliases: ["upt"],
-    credits: "XaviaTeam"
+    credits: "XaviaTeam",
+    rikaprefix: true
 }
 
 function onCall({ message }) {
