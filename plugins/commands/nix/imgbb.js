@@ -11,7 +11,7 @@ const config = {
   cooldowns: 5,
   description: "Upload image to ImgBB and get link",
   usage: "reply to an image or /imgbb <image url>",
-  category: "utility"
+  category: "nix"
 };
 
 async function onCall({ message, args }) {
