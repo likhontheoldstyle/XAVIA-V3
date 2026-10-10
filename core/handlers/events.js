@@ -224,7 +224,7 @@ async function handleCommand(event) {
         }
     } else {
         const input = args[0].slice(prefix.length)?.toLowerCase?.();
-        const langFile = resolvePath("./language/nix.txt");
+        const langFile = resolvePath("./language/rika.txt");
         if (!input) {
             let msg = `The command you are using does not exist, type ${prefix}help to see all available commands`;
             try {
@@ -234,7 +234,7 @@ async function handleCommand(event) {
                     if (m) msg = m[1].replace("{prefix}", prefix);
                 }
             } catch (e) {
-                console.error("Error reading language/nix.txt:", e);
+                console.error("Error reading language/rika.txt:", e);
             }
             api.sendMessage(msg, threadID, messageID);
         } else {
@@ -249,7 +249,7 @@ async function handleCommand(event) {
                             .replace("{prefix}", prefix);
                 }
             } catch (e) {
-                console.error("Error reading language/nix.txt:", e);
+                console.error("Error reading language/rika.txt:", e);
             }
             api.sendMessage(msg, threadID, messageID);
         }
