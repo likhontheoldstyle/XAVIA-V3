@@ -1,9 +1,9 @@
 import axios from "axios";
 
 const apiUrl = "https://baby-apis-nix.vercel.app";
-const nix = ["😚", "Yes 😀, I am here", "What's up?", "Bolo jaan ki korte pabor jonno"];
+const rika = ["😚", "Yes 😀, I am here", "What's up?", "Bolo jaan ki korte pabor jonno"];
 const ok = ["baby", "bby", "bot", "বেবি", "জান", "jan", "বট", "বেবী", "বাবু", "janu"];
-const getRand = () => nix[Math.floor(Math.random() * nix.length)];
+const getRand = () => rika[Math.floor(Math.random() * nix.length)];
 
 const config = {
     name: "bby",
