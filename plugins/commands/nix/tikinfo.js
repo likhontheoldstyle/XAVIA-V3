@@ -9,7 +9,7 @@ const config = {
   cooldowns: 5,
   description: "Get full TikTok profile info - stalk a TikTok profile",
   usage: "<username>",
-  category: "info"
+  category: "nix"
 };
 
 async function onCall({ message, args }) {
