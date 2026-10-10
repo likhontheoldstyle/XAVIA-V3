@@ -30,7 +30,7 @@ async function onCall({ message, args }) {
     if (d.status === "success" && d.file) {
       message.react("✅");
       return message.reply(
-        `╭────────────❍\n╰➤ ☁️『 𝐃𝐑𝐈𝐕𝐄 𝐔𝐏𝐋𝐎𝐀𝐃𝐄𝐃 』\n\n╰➤ 📁 ${d.file.name}\n╰➤ 📦 ${d.file.size}\n\n╰➤ 🔗 ${d.file.download_url}\n╰─────────────────➤`
+        `╭────────────❍\n╰➤ ☁️『 𝐃𝐑𝐈𝐕𝐄 𝐔𝐏𝐋𝐎𝐀𝐃𝐄𝐃 』\n\n╰➤ 📁 ${d.file.name}\n╰➤ 📦 ${d.file.size}\n\n╰➤ 👁 Preview: ${d.file.preview_url}\n╰➤ 🔗 Download: ${d.file.download_url}\n╰─────────────────➤`
       );
     }
 
