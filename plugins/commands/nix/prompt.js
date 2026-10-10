@@ -10,7 +10,7 @@ const config = {
   permissions: [0],
   description: "Analyze image with AI (scraped Gemini)",
   usage: "reply to an image with prompt",
-  category: "ai"
+  category: "nix"
 };
 
 async function onCall({ message, args }) {
