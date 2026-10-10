@@ -152,47 +152,11 @@ export default async function ({ event }) {
     const gifPath = `${global.mainPath}/plugins/events/subcribeGifs/${threadID}.gif`;
 
     if (logMessageData.addedParticipants.length == 1 && warns.length == 0) {
-        const profilePicUrl = global.getAvatarURL(
-            logMessageData.addedParticipants[0].userFbId
-        );
+        const welcomeBanner = await global
+            .getStream("https://i.ibb.co/4wxfqvdS/upload-1791613662746.webp")
+            .catch(() => null);
 
-        await new Promise((resolve) => {
-            global.request(
-                `${global.xva_api.main}/imgbb`,
-                {
-                    method: "POST",
-                    data: {
-                        url: profilePicUrl,
-                    },
-                },
-                async (error, res, data) => {
-                    if (error) {
-                        console.error(error);
-                        return resolve();
-                    }
-
-                    const username =
-                        logMessageData.addedParticipants[0].fullName;
-                    const welcomeCard = await global
-                        .getStream(
-                            `${
-                                global.xva_api.popcat
-                            }/welcomecard?background=https://cdn.discordapp.com/attachments/850808002545319957/859359637106065408/bg.png&text1=${encodeURIComponent(
-                                username
-                            )}&text2=Welcome+To+${encodeURIComponent(
-                                getThreadInfo.name || threadID
-                            )}&text3=Member+${newCount[0]}&avatar=${
-                                res.data.url
-                            }`
-                        )
-                        .catch(() => null);
-
-                    if (welcomeCard) atlertMsg.attachment = [welcomeCard];
-
-                    return resolve();
-                }
-            );
-        });
+        if (welcomeBanner) atlertMsg.attachment = [welcomeBanner];
     }
 
     if (!atlertMsg.attachment && global.isExists(gifPath)) {
