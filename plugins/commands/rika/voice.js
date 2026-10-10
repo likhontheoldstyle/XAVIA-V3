@@ -45,7 +45,6 @@ async function onCall({ message, args }) {
 
     message.react("✅");
     return message.reply({
-      body: `🎙 ${match}`,
       attachment: r.data
     });
   } catch (e) {
