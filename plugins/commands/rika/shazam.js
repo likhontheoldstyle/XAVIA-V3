@@ -106,7 +106,7 @@ async function onCall({ message }) {
     ["audio", "video"].includes(message.messageReply?.attachments?.[0]?.type);
 
   if (!isReplyMedia) {
-    return message.reply("❌ Reply to an audio/video message with /shazam");
+    return message.reply("❌ Audio/video-te reply diye /shazam likho 🎵");
   }
 
   message.react("🎵");
@@ -127,11 +127,18 @@ async function onCall({ message }) {
     const song = await identifySong(wav);
 
     if (song) {
-      return message.reply(`🎵 *${song.title}*\n👤 ${song.artist}\n💿 ${song.album}`);
+      return message.reply(
+        `╭────────────❍\n` +
+        `╰➤『 𝐒𝐎𝐍𝐆 𝐅𝐈𝐍𝐃𝐄𝐃 ! 』,\n\n` +
+        `╰➤ 💿 𝐒𝐎𝐍𝐆 𝐍𝐀𝐌𝐄 : ${song.title}\n\n` +
+        `╰➤ 👤 𝐀𝐑𝐓𝐈𝐒𝐓 𝐍𝐀𝐌𝐄 : ${song.artist}\n\n` +
+        `╰➤ 🗣️ 𝐀𝐋𝐁𝐔𝐌 : ${song.album || "N/A"}\n` +
+        `╰─────────────────➤`
+      );
     }
-    return message.reply("❌ Song not found");
+    return message.reply("❌ Gan khuje pailam na 😔");
   } catch (e) {
-    return message.reply(`❌ Error: ${e.message}`);
+    return message.reply(`❌ Somossa hoise: ${e.message}`);
   }
 }
 
