@@ -8,7 +8,7 @@ import { spawn } from "child_process";
 const config = {
   name: "shazam",
   aliases: ["findsong", "whatsong"],
-  version: "1.0.0",
+  version: "1.1.0",
   credits: "Rika",
   permissions: [0],
   cooldowns: 10,
@@ -16,6 +16,14 @@ const config = {
   usage: "reply to audio/video with /shazam",
   category: "rika"
 };
+
+let shazamReady = false;
+async function ensureShazam() {
+  if (shazamReady) return;
+  const core = await import("shazamio-core");
+  await core.start();
+  shazamReady = true;
+}
 
 async function downloadBuffer(url, cookies = "") {
   const res = await axios.get(url, {
@@ -30,37 +38,60 @@ async function downloadBuffer(url, cookies = "") {
   return Buffer.from(res.data);
 }
 
-async function extractSample(buffer, positionSec = 0, durationSec = 8) {
+async function extractWav(buffer) {
   let ffmpegPath;
   try {
     ffmpegPath = (await import("ffmpeg-static")).default;
   } catch {
     ffmpegPath = "ffmpeg";
   }
-  const tmpOut = path.join(os.tmpdir(), `shazam-${crypto.randomBytes(8).toString("hex")}.raw`);
+  const tmpOut = path.join(os.tmpdir(), `shazam-${crypto.randomBytes(8).toString("hex")}.wav`);
   await new Promise((resolve, reject) => {
     const proc = spawn(ffmpegPath, [
-      "-y", "-ss", String(positionSec), "-t", String(durationSec),
-      "-i", "pipe:0", "-ac", "1", "-ar", "44100", "-f", "s16le", tmpOut
+      "-y", "-t", "12", "-i", "pipe:0",
+      "-ac", "1", "-ar", "44100", "-f", "wav", tmpOut
     ]);
     proc.stdin.write(buffer);
     proc.stdin.end();
     proc.on("close", (code) => (code === 0 ? resolve() : reject(new Error("ffmpeg failed"))));
     proc.on("error", reject);
   });
-  const raw = fs.readFileSync(tmpOut);
+  const data = fs.readFileSync(tmpOut);
   fs.unlinkSync(tmpOut);
-  return raw;
+  return data;
 }
 
-async function recognizeShazam(sample) {
-  const { Shazam } = await import("shazamio-core");
-  const shazam = new Shazam();
-  return shazam.recognize(sample);
-}
+async function identifySong(wavBuffer) {
+  await ensureShazam();
+  const core = await import("shazamio-core");
+  const signatures = core.recognizeBytes(new Uint8Array(wavBuffer));
+  if (!signatures.length) return null;
 
-function formatTrack(data) {
-  const track = data?.track || {};
+  const sig = signatures[0];
+  const uri = sig.uri;
+  sig.free();
+
+  const uuid1 = crypto.randomUUID();
+  const uuid2 = crypto.randomUUID();
+  const res = await axios.post(
+    `https://amp.shazam.com/discovery/v5/en/US/iphone/-/tag/${uuid1}/${uuid2}`,
+    {
+      geolocation: { altitude: 0, latitude: 0, longitude: 0 },
+      signature: { samplems: 12000, timestamp: Date.now(), uri },
+      timestamp: Date.now(),
+      timezone: "Asia/Dhaka"
+    },
+    {
+      headers: {
+        "Content-Type": "application/json",
+        "User-Agent": "Shazam/15.18.0"
+      },
+      timeout: 15000
+    }
+  );
+
+  const track = res.data?.track;
+  if (!track) return null;
   return {
     title: track.title || "",
     artist: track.subtitle || "",
@@ -92,12 +123,11 @@ async function onCall({ message }) {
     } catch {}
 
     const buffer = await downloadBuffer(url, cookies);
-    const sample = await extractSample(buffer);
-    const result = await recognizeShazam(sample);
+    const wav = await extractWav(buffer);
+    const song = await identifySong(wav);
 
-    if (result?.track) {
-      const t = formatTrack(result);
-      return message.reply(`🎵 *${t.title}*\n👤 ${t.artist}\n💿 ${t.album}`);
+    if (song) {
+      return message.reply(`🎵 *${song.title}*\n👤 ${song.artist}\n💿 ${song.album}`);
     }
     return message.reply("❌ Song not found");
   } catch (e) {
