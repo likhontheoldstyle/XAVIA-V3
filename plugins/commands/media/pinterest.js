@@ -55,9 +55,28 @@ async function handleReply({ message, eventData }) {
 
 async function showList(message, results) {
   const list = results.slice(0, 10);
+  const attachments = [];
+  const saved = [];
   for (const pin of list) {
-    await sendPinImage(message, pin, null);
+    try {
+      if (!pin.image) continue;
+      const res = await axios.get(pin.image, { responseType: "arraybuffer", timeout: 60000 });
+      const buf = Buffer.from(res.data);
+      if (buf.length > 24 * 1024 * 1024) continue;
+      const save = join(global.cachePath, `pinterest_${Date.now()}_${Math.random().toString(36).slice(2)}.jpg`);
+      writeFileSync(save, buf);
+      saved.push(save);
+      attachments.push(createReadStream(save));
+    } catch (e) {
+      console.error("Pinterest image download error:", e.message);
+    }
   }
+  if (!attachments.length) return message.reply("❌ Failed to download images.");
+  await message.reply({
+    body: `📌 Pinterest (${attachments.length} images)`,
+    attachment: attachments
+  }).catch(() => {});
+  saved.forEach(f => { try { unlinkSync(f); } catch (e) {} });
 }
 
 async function onCall({ message, args }) {
