@@ -56,12 +56,11 @@ async function checkAndSend() {
         const now = moment().tz("Asia/Dhaka");
         if (now.minute() !== 0) return;
         const hourKey = now.format("YYYY-MM-DD-HH");
-        const allThreads = await global.controllers.Threads.getAll?.() || [];
+        const allThreads = global.controllers.Threads.getAll() || [];
         for (const t of allThreads) {
-            const threadID = t.threadID || t.id;
+            const threadID = t?.info?.threadID;
             if (!threadID) continue;
-            if (!String(threadID).endsWith("@g.us") && !/^\d+$/.test(String(threadID))) continue;
-            const s = t.data?.autotime || {};
+            const s = t?.data?.autotime || {};
             if (s.enabled === false) continue;
             if (s.lastSent === hourKey) continue;
             try {
