@@ -54,7 +54,7 @@ async function handleReply({ message, eventData }) {
 }
 
 async function showList(message, results) {
-  const list = results.slice(0, 5);
+  const list = results.slice(0, 10);
   for (const pin of list) {
     await sendPinImage(message, pin, null);
   }
