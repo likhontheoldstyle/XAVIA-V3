@@ -53,7 +53,7 @@ async function handleReply({ message, eventData }) {
   await sendPinImage(message, picked, msg);
 }
 
-async function showList(message, results) {
+async function showList(message, results, page = 1) {
   const list = results.slice(0, 10);
   const attachments = [];
   const saved = [];
@@ -73,7 +73,7 @@ async function showList(message, results) {
   }
   if (!attachments.length) return message.reply("❌ Failed to download images.");
   await message.reply({
-    body: `📌 Pinterest (${attachments.length} images)`,
+    body: `📌 Pinterest - Page ${page} (${attachments.length} images)`,
     attachment: attachments
   }).catch(() => {});
   saved.forEach(f => { try { unlinkSync(f); } catch (e) {} });
@@ -100,16 +100,25 @@ async function onCall({ message, args }) {
     }
   }
 
+  const parts = input.split(/\s+/);
+  let page = 1;
+  if (parts.length > 1 && /^\d+$/.test(parts[parts.length - 1])) {
+    page = parseInt(parts.pop());
+  }
+  const query = parts.join(" ");
+
   const msg = await message.send("⏳ Searching...");
   try {
     const { data } = await axios.get(`${API}/search`, {
-      params: { q: input, limit: 10 },
+      params: { q: query, limit: 50 },
       timeout: 60000
     });
     const results = data.pins || [];
-    if (!results.length) throw new Error("No results.");
+    const start = (page - 1) * 10;
+    const pageResults = results.slice(start, start + 10);
+    if (!pageResults.length) throw new Error("No results.");
     (msg.unsend()?.catch(() => {}));
-    return showList(message, results);
+    return showList(message, pageResults, page);
   } catch (e) {
     (msg.unsend()?.catch(() => {}));
     return message.reply("❌ No results found.");
