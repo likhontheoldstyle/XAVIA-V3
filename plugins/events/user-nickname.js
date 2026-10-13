@@ -11,7 +11,7 @@ export default async function ({ event }) {
     const oldNickname = getThreadInfo.nicknames[logMessageData.participant_id] || null;
     const newNickname = logMessageData.nickname;
     let smallCheck = false, atlertMsg, reversed = false;
-    if (getThreadData.antiSettings.antiChangeNickname == true) {
+    if (!getThreadData.antiSettings || getThreadData.antiSettings.antiChangeNickname !== false) {
         const isBot = author == botID;
         const isReversing = global.data.temps.some(i => i.type == 'antiChangeNickname' && i.threadID == threadID);
         if (!(isBot && isReversing)) {
@@ -35,7 +35,7 @@ export default async function ({ event }) {
         await Threads.updateInfo(threadID, { nicknames: getThreadInfo.nicknames });
     }
 
-    if (!smallCheck && reversed && getThreadData?.antiSettings?.notifyChange === true)
+    if (!smallCheck && reversed && getThreadData?.antiSettings?.notifyChange !== false)
         api.sendMessage(getLang('plugin.events.user-nickname.reversed_t'), threadID);
 
     if (!smallCheck && getThreadData?.notifyChange?.status === true) {
