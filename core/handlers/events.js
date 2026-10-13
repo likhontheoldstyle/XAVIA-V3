@@ -155,12 +155,16 @@ async function handleCommand(event) {
     const prefix = (thread?.data?.prefix || global.config.PREFIX || "x")
         .trim()
         .toLowerCase();
-    if (!(args.length > 0 && args[0].startsWith(prefix))) return;
+    const prefixMode = (global.config.PREFIX_MODE || "prefix").toLowerCase();
+    if (!(args.length > 0)) return;
+    const hasPrefix = args[0].toLowerCase().startsWith(prefix);
+    if (prefixMode === "prefix" && !hasPrefix) return;
 
     const { api, getLang } = global;
-    const cmdName = resolveCommandName(
-        args[0].slice(prefix.length)?.toLowerCase?.()
-    );
+    const rawName = hasPrefix
+        ? args[0].slice(prefix.length)?.toLowerCase?.()
+        : args[0]?.toLowerCase?.();
+    const cmdName = resolveCommandName(rawName);
     const handler = global.plugins.commands.get(cmdName) || null;
     const cmdConfig = global.plugins.commandsConfig.get(cmdName);
 
@@ -223,7 +227,10 @@ async function handleCommand(event) {
             );
         }
     } else {
-        const input = args[0].slice(prefix.length)?.toLowerCase?.();
+        if (!hasPrefix && prefixMode !== "prefix") return;
+        const input = hasPrefix
+            ? args[0].slice(prefix.length)?.toLowerCase?.()
+            : args[0]?.toLowerCase?.();
         const langFile = resolvePath("./language/rika.txt");
         if (!input) {
             return;
