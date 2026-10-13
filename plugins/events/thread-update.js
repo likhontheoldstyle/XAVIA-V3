@@ -17,7 +17,7 @@ export default async function ({ event }) {
                 const newName = logMessageData.name;
                 let smallCheck = false;
 
-                if (getThreadData.antiSettings?.antiChangeGroupName == true) {
+                if (getThreadData.antiSettings?.antiChangeGroupName !== false) {
                     const isBot = author == botID;
                     const isReversing = global.data.temps.some(
                         (i) =>
@@ -53,7 +53,7 @@ export default async function ({ event }) {
                 if (
                     !smallCheck &&
                     reversed &&
-                    getThreadData?.antiSettings?.notifyChange === true
+                    getThreadData?.antiSettings?.notifyChange !== false
                 )
                     api.sendMessage(
                         getLang("plugins.events.thread-update.name.reversed_t"),
