@@ -1,4 +1,4 @@
-const moment = require("moment-timezone");
+import moment from "moment-timezone";
 
 const config = {
     name: "autotime",
@@ -69,7 +69,7 @@ async function onCall({ message, getLang }) {
     return message.reply(getLang("info"), threadID, messageID);
 }
 
-module.exports = {
+export default {
     config,
     langData,
     onCall
