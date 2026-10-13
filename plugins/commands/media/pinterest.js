@@ -17,7 +17,7 @@ const config = {
 };
 
 async function sendPinImage(message, pin, msg) {
-  const clean = () => { if (msg) msg.unsend().catch(() => {}); };
+  const clean = () => { if (msg) (msg.unsend()?.catch(() => {})); };
   try {
     const imgUrl = pin.image;
     if (!imgUrl) throw new Error("No image found.");
@@ -49,7 +49,7 @@ async function handleReply({ message, eventData }) {
   }
   const picked = results[v - 1];
   const msg = await message.send("⏳ Downloading...");
-  await global.api.unsendMessage(messageID).catch(() => {});
+  await global.api.unsendMessage(messageID)?.catch(() => {});
   await sendPinImage(message, picked, msg);
 }
 
@@ -83,10 +83,10 @@ async function onCall({ message, args }) {
       const params = /^\d{10,20}$/.test(first) ? { id: first } : { url: first };
       const { data } = await axios.get(`${API}/pin`, { params, timeout: 60000 });
       if (!data.success) throw new Error("Pin not found.");
-      msg.unsend().catch(() => {});
+      (msg.unsend()?.catch(() => {}));
       return sendPinImage(message, data, null);
     } catch (e) {
-      msg.unsend().catch(() => {});
+      (msg.unsend()?.catch(() => {}));
       return message.reply("❌ Pin not found.");
     }
   }
@@ -99,10 +99,10 @@ async function onCall({ message, args }) {
     });
     const results = data.pins || [];
     if (!results.length) throw new Error("No results.");
-    msg.unsend().catch(() => {});
+    (msg.unsend()?.catch(() => {}));
     return showList(message, results);
   } catch (e) {
-    msg.unsend().catch(() => {});
+    (msg.unsend()?.catch(() => {}));
     return message.reply("❌ No results found.");
   }
 }
