@@ -54,20 +54,10 @@ async function handleReply({ message, eventData }) {
 }
 
 async function showList(message, results) {
-  const list = results.slice(0, 10);
-  let text = "📌 Pinterest\n\n";
-  list.forEach((r, i) => {
-    text += `${i + 1}. ${r.type === "video" ? "🎬" : "🖼️"} ${(r.title || "Pin").slice(0, 50)}\n`;
-  });
-  message.reply(text + "\nReply with a number (1-10) to download.").then(d => {
-    d.addReplyEvent({
-      callback: handleReply,
-      results: list,
-      messageID: d.messageID,
-      author: message.senderID,
-      author_only: true
-    });
-  });
+  const list = results.slice(0, 5);
+  for (const pin of list) {
+    await sendPinImage(message, pin, null);
+  }
 }
 
 async function onCall({ message, args }) {
