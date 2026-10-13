@@ -18,8 +18,7 @@ export default async function ({ event }) {
         atlertMsg = null;
 
     if (
-        getThreadData.antiSettings &&
-        getThreadData.antiSettings.antiChangeGroupImage == true &&
+        (!getThreadData.antiSettings || getThreadData.antiSettings.antiChangeGroupImage !== false) &&
         oldImage
     ) {
         const isReversing = global.data.temps.some(
@@ -108,7 +107,7 @@ export default async function ({ event }) {
     if (
         oldImage &&
         reversed &&
-        getThreadData?.antiSettings?.notifyChange === true
+        getThreadData?.antiSettings?.notifyChange !== false
     ) {
         api.sendMessage(
             getLang("plugins.events.change_thread_image.reversed_t"),
