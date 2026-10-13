@@ -72,7 +72,7 @@ const isSpam = (memberData, preTime, argsLength, msg, atmLength) => {
 };
 
 const onCall = ({ message, getLang, data }) => {
-    if (!data?.thread?.data?.antiSettings?.antiSpam) return;
+    if (data?.thread?.data?.antiSettings?.antiSpam === false) return;
     if (!message.isGroup) return;
     if (!data?.thread?.info?.adminIDs?.some((e) => e == global.botID)) return;
 
