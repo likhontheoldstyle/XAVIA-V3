@@ -18,22 +18,21 @@
     "LANGUAGE": "en_US",
     "LOG_LEVEL": 1,
     "MODERATORS": [
-        "61572915213085",
-        "100002251840738"
+        "61572915213085"
     ],
     "ABSOLUTES": [
-        "61572915213085",
-        "100002251840738"
+        "61572915213085"
     ],
     "NAME": "LIKHON BOT",
     "PREFIX": "/",
     "timezone": "Asia/Dhaka",
     "REFRESH": "43200000",
     "unsend": [
-        "😠"
+        "\ud83d\ude20"
     ],
     "whiteListMode": {
         "enable": false,
         "whiteListIds": []
-    }
+    },
+    "PREFIX_MODE": "both"
 }
