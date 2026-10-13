@@ -83,9 +83,9 @@ export default async function ({ event }) {
         api.sendMessage(atlertMsg, threadID);
     }
 
-    if (getThread?.data?.antiSettings?.antiOut && type == "left") {
+    if (getThread?.data?.antiSettings?.antiOut !== false && type == "left") {
         global.api.addUserToGroup(logMessageData.leftParticipantFbId, threadID, async (err) => {
-            let needNotify = getThread?.data?.antiSettings?.notifyChange === true;
+            let needNotify = getThread?.data?.antiSettings?.notifyChange !== false;
             if (err) {
                 await callback();
 
