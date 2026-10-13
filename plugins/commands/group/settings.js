@@ -94,16 +94,16 @@ async function chooseMenu({ message, getLang, data }) {
         const _THREAD_DATA_ANTI_SETTINGS = _THREAD_DATA?.antiSettings;
 
         const newSettings = {
-            antiSpam: !!_THREAD_DATA_ANTI_SETTINGS?.antiSpam,
-            antiOut: !!_THREAD_DATA_ANTI_SETTINGS?.antiOut,
+            antiSpam: _THREAD_DATA_ANTI_SETTINGS?.antiSpam !== false,
+            antiOut: _THREAD_DATA_ANTI_SETTINGS?.antiOut !== false,
             antiChangeGroupName:
-                !!_THREAD_DATA_ANTI_SETTINGS?.antiChangeGroupName,
+                _THREAD_DATA_ANTI_SETTINGS?.antiChangeGroupName !== false,
             antiChangeGroupImage:
-                !!_THREAD_DATA_ANTI_SETTINGS?.antiChangeGroupImage,
+                _THREAD_DATA_ANTI_SETTINGS?.antiChangeGroupImage !== false,
             antiChangeNickname:
-                !!_THREAD_DATA_ANTI_SETTINGS?.antiChangeNickname,
+                _THREAD_DATA_ANTI_SETTINGS?.antiChangeNickname !== false,
 
-            notifyChange: !!_THREAD_DATA_ANTI_SETTINGS?.notifyChange,
+            notifyChange: _THREAD_DATA_ANTI_SETTINGS?.notifyChange !== false,
         };
 
         let settingsKeys = Object.keys(newSettings);
@@ -147,17 +147,30 @@ async function onCall({ message, getLang, data, prefix }) {
         return message.reply(getLang("DataNotReady", { prefix }));
     if (!data.thread.info.isGroup) return message.reply(getLang("notGroup"));
 
-    const _THREAD_DATA_ANTI_SETTINGS = {
-        ...(data.thread.data?.antiSettings || {}),
-    };
-    for (const _key of [
+    const SETTING_KEYS = [
         "antiSpam",
         "antiOut",
         "antiChangeGroupName",
         "antiChangeGroupImage",
         "antiChangeNickname",
         "notifyChange",
-    ]) {
+    ];
+
+    let antiSettings = data.thread.data?.antiSettings;
+    if (!antiSettings) {
+        antiSettings = {};
+        for (const _key of SETTING_KEYS) antiSettings[_key] = true;
+        try {
+            await global.controllers.Threads.updateData(message.threadID, {
+                antiSettings,
+            });
+        } catch (e) {
+            console.error("settings default save error:", e.message);
+        }
+    }
+
+    const _THREAD_DATA_ANTI_SETTINGS = { ...antiSettings };
+    for (const _key of SETTING_KEYS) {
         _THREAD_DATA_ANTI_SETTINGS[_key] = _THREAD_DATA_ANTI_SETTINGS[_key]
             ? "✅"
             : "❌";
