@@ -4,7 +4,7 @@ import "dotenv/config";
 import { writeFileSync, readFileSync } from "fs";
 import { resolve as resolvePath } from "path";
 import logger from "./var/modules/logger.js";
-import login from "nijhum-fca";
+import login from "aryan-nix-fca";
 import startServer from "./dashboard/server/app.js";
 import startKeepAlive from "./var/modules/keepalive.js";
 import handleListen from "./handlers/listen.js";
