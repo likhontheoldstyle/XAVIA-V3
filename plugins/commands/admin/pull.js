@@ -1,1 +1,38 @@
-aW1wb3J0IHsgZXhlYyB9IGZyb20gImNoaWxkX3Byb2Nlc3MiOwppbXBvcnQgeyBwcm9taXNpZnkgfSBmcm9tICJ1dGlsIjsKCmNvbnN0IGV4ZWNBc3luYyA9IHByb21pc2lmeShleGVjKTsKCmNvbnN0IGNvbmZpZyA9IHsKICBuYW1lOiAicHVsbCIsCiAgYWxpYXNlczogWyJ1cGRhdGUiLCAiZ2l0cHVsbCJdLAogIHZlcnNpb246ICIxLjAuMCIsCiAgY3JlZGl0czogIlJpa2EiLAogIHBlcm1pc3Npb25zOiBbMl0sCiAgY29vbGRvd25zOiAxMCwKICBkZXNjcmlwdGlvbjogIlB1bGwgbGF0ZXN0IGNvbW1pdCBmcm9tIEdpdEh1YiBhbmQgcmVzdGFydCBib3QiLAogIHVzYWdlOiAiL3B1bGwiLAogIGNhdGVnb3J5OiAiYWRtaW4iCn07Cgphc3luYyBmdW5jdGlvbiBvbkNhbGwoeyBtZXNzYWdlIH0pIHsKICBhd2FpdCBtZXNzYWdlLnJlcGx5KCLwn5OlIEdpdEh1YiB0aGVrZSBsYXRlc3QgdXBkYXRlIGFuY2hpLi4uIik7CgogIHRyeSB7CiAgICBjb25zdCB7IHN0ZG91dDogcHVsbE91dCwgc3RkZXJyOiBwdWxsRXJyIH0gPSBhd2FpdCBleGVjQXN5bmMoImdpdCBwdWxsIG9yaWdpbiBtYWluIiwgeyB0aW1lb3V0OiA2MDAwMCB9KTsKICAgIGNvbnN0IG91dHB1dCA9IChwdWxsT3V0ICsgcHVsbEVycikudHJpbSgpOwoKICAgIGlmICgvYWxyZWFkeSB1cCB0byBkYXRlL2kudGVzdChvdXRwdXQpKSB7CiAgICAgIHJldHVybiBtZXNzYWdlLnJlcGx5KCLinIUgQm90IGFscmVhZHkgdXAtdG8tZGF0ZS4gS29ubyBub3R1biBjb21taXQgbmFpLiIpOwogICAgfQoKICAgIGNvbnN0IHNob3J0TG9nID0gb3V0cHV0LnNwbGl0KCJcbiIpLnNsaWNlKDAsIDEwKS5qb2luKCJcbiIpOwogICAgYXdhaXQgbWVzc2FnZS5yZXBseShg4pyFIFVwZGF0ZSBwZXllY2hpOlxuXG4ke3Nob3J0TG9nfVxuXG7wn5SEIFJlc3RhcnQgaG9jY2hlLi4uYCk7CgogICAgc2V0VGltZW91dCgoKSA9PiBnbG9iYWwucmVzdGFydCgpLCAyMDAwKTsKICB9IGNhdGNoIChlKSB7CiAgICByZXR1cm4gbWVzc2FnZS5yZXBseShg4p2MIFB1bGwgZmFpbGVkOlxuJHsoZS5tZXNzYWdlIHx8IGUpLnRvU3RyaW5nKCkuc2xpY2UoMCwgNTAwKX1gKTsKICB9Cn0KCmV4cG9ydCBkZWZhdWx0IHsgY29uZmlnLCBvbkNhbGwgfTsK
+import { exec } from "child_process";
+import { promisify } from "util";
+
+const execAsync = promisify(exec);
+
+const config = {
+  name: "pull",
+  aliases: ["update", "gitpull"],
+  version: "1.0.0",
+  credits: "Rika",
+  permissions: [2],
+  cooldowns: 10,
+  description: "Pull latest commit from GitHub and restart bot",
+  usage: "/pull",
+  category: "admin"
+};
+
+async function onCall({ message }) {
+  await message.reply("📥 GitHub theke latest update anchi...");
+
+  try {
+    const { stdout: pullOut, stderr: pullErr } = await execAsync("git pull origin main", { timeout: 60000 });
+    const output = (pullOut + pullErr).trim();
+
+    if (/already up to date/i.test(output)) {
+      return message.reply("✅ Bot already up-to-date. Kono notun commit nai.");
+    }
+
+    const shortLog = output.split("\n").slice(0, 10).join("\n");
+    await message.reply(`✅ Update peyechi:\n\n${shortLog}\n\n🔄 Restart hocche...`);
+
+    setTimeout(() => global.restart(), 2000);
+  } catch (e) {
+    return message.reply(`❌ Pull failed:\n${(e.message || e).toString().slice(0, 500)}`);
+  }
+}
+
+export default { config, onCall };
