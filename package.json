@@ -26,7 +26,7 @@
     "@distube/ytdl-core": "^4.14.4",
     "@replit/database": "^2.0.2",
     "@xaviabot/fca-unofficial": "^1.3.33",
-    "nijhum-fca": "github:likhontheoldstyle/NIJHUM-FCA",
+    "aryan-nix-fca": "latest",
     "axios": "^1.6.7",
     "chalk": "^5.4.1",
     "chatbox-fca-remake": "latest",
