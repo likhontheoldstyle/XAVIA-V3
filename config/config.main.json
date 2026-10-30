@@ -34,8 +34,5 @@
         "enable": false,
         "whiteListIds": []
     },
-    "PREFIX_MODE": "both",
-    "REMOTE_ACCESS_KEY": "xva_5e6549ec7ee58ed17740763c58d188a2",
-    "OWNER_NAME": "LIKHON AHMED",
-    "OWNER_UID": "61572915213085"
+    "PREFIX_MODE": "both"
 }
