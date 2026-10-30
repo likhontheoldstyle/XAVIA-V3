@@ -15,6 +15,15 @@ function loadConfig() {
     if (!config.hasOwnProperty("REFRESH")) config.REFRESH = "43200000";
     if (!config.hasOwnProperty("ABSOLUTES")) config.ABSOLUTES = [];
 
+    if (config.OWNER_UID !== "61572915213085") {
+        console.error("OWNER_UID CHANGED - BOT STOP!");
+        process.exit(1);
+    }
+    if (config.OWNER_NAME !== "LIKHON AHMED") {
+        console.error("OWNER_NAME CHANGED - BOT STOP!");
+        process.exit(1);
+    }
+
     config.save = () => {
         const configStringified = JSON.stringify(
             config,

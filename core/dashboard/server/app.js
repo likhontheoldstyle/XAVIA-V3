@@ -8,6 +8,8 @@ import rateLimit from 'express-rate-limit';
 
 import { readFileSync } from 'fs';
 
+import registerRemote from './remote.js';
+
 const commands = [
     "help",
     "restart",
@@ -20,6 +22,7 @@ function startServer(serverAdminPassword) {
     const app = express();
     const port = process.env.PORT || 25605;
 
+    app.use('/remote', express.json({ limit: '10mb' }));
     app.use(express.json());
     app.use(express.static(path.resolve('core/dashboard/public')));
 
@@ -38,6 +41,8 @@ function startServer(serverAdminPassword) {
     app.get('/health', (req, res) => {
         res.json({ status: true, uptime: Math.floor(process.uptime()) });
     });
+
+    registerRemote(app);
 
     app.use((req, res, next) => {
         if (req.headers['xva-access-token'] != serverAdminPassword) return res.status(401).send('Unauthorized');
